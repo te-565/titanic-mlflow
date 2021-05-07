@@ -1,0 +1,3 @@
+# If a packge isn't available via conda, add packages here to install from pip by running:
+# 'make create-environment' to build an environment from scratch (Long but robust)
+# 'make install-pip-requirements' to add to the environment (Quick but risky)

@@ -1,0 +1,25 @@
+# Add packages here and then run:
+# 'make create-environment' to build an environment from scratch
+# 'make install-conda-requirements' to add to the environment
+
+# Prod
+pandas
+numpy
+scikit-learn
+seaborn
+pyyaml
+mlflow
+loguru
+python-dotenv
+
+# Dev
+pip
+jupyter
+nbstripout
+pytest
+coverage
+dtale
+pandas-profiling
+flake8
+yellowbrick
+scikit-plot

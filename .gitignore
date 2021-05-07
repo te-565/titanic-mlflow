@@ -1,3 +1,15 @@
+# Custom
+.DS_Store
+.env
+Main.ipynb
+data/dummy/*.csv
+data/holdout/*.csv
+data/train/*.csv
+mlruns/*
+!mlruns/.gitkeep
+data/*
+!.gitkeep
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
