@@ -10,6 +10,7 @@ mlruns/*
 !mlruns/.gitkeep
 data/*
 !.gitkeep
+titanic.code-workspace
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

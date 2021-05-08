@@ -8,13 +8,11 @@ export $(shell sed 's/=.*//' .env)
 ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda activate
 DEACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda deactivate ; conda deactivate
 
-
 # Help
 .DEFAULT_GOAL := help
 .PHONY: help
 help:
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
-	| sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 
 # Environment Management
@@ -24,7 +22,14 @@ create-environment: ## Create the env, install packages, create a kernel and wri
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
 	conda install --yes --file requirements-conda.txt && \
 	pip install -r requirements-pip.txt && \
-	python -m ipykernel install --user --name $(CONDA_ENVIRONMENT_NAME) && \
+	conda env export > environment.yaml && 
+	$(DEACTIVATE)
+
+.PHONY: install-all-requirements
+install-all-requirements: ## Install packages in requirements-conda & requirements-pip and write to environment.yaml
+	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
+	conda install --yes --file requirements-conda.txt && \
+	pip install -r requirements-pip.txt && \
 	conda env export > environment.yaml
 	$(DEACTIVATE)
 
@@ -49,11 +54,10 @@ remove-environment: ## Remove the environment and any relevant files
 
 
 # Jupyter kernel management
-.PHONY: kernel
-kernel: ## Register the conda environment to Jupyter
-	$(ACTIVATE) && \
-	python -m ipykernel install \
-	--user --name $(CONDA_ENVIRONMENT_NAME) --display-name $(CONDA_ENVIRONMENT_NAME)
+.PHONY: create-kernel
+create-kernel: ## Register the conda environment to Jupyter
+	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
+	ipython kernel install --user --name=$(CONDA_ENVIRONMENT_NAME)
 	$(DEACTIVATE) 
 
 .PHONY: remove-kernel
