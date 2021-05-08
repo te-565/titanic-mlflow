@@ -6,7 +6,6 @@ from loguru import logger
 def ingest_split(
     train_raw_path: str,
     holdout_raw_path: str,
-    uid: str,
     target: str,
     ingest_split_parameters: dict,
 ):
@@ -87,6 +86,5 @@ def ingest_split(
 
         return X_train, X_test, y_train, y_test, X_holdout
 
-    except Exception as e:
+    except Exception:
         logger.exception("Error in ingest_split()")
-        logger.exception(e)

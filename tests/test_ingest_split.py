@@ -16,7 +16,6 @@ def test_ingest_split():
     X_train, X_test, y_train, y_test, X_holdout = ingest_split(
         train_raw_path=config["train_raw_path"],
         holdout_raw_path=config["holdout_raw_path"],
-        uid=parameters["uid"],
         target=parameters["target"],
         ingest_split_parameters=parameters["ingest_split_parameters"]
     )

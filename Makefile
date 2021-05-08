@@ -1,12 +1,12 @@
 # Based on: https://towardsdatascience.com/create-virtualenv-for-data-science-projects-with-one-command-only-7bec3548419f
 
 # Load in Environment Variables
-include .env
-export $(shell sed 's/=.*//' .env)
 
 # Variables
 ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda activate
 DEACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda deactivate ; conda deactivate
+CONDA_ENVIRONMENT_NAME=titanic-mlflow-env
+PYTHON_VERSION=3.8
 
 # Help
 .DEFAULT_GOAL := help
