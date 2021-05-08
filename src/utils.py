@@ -136,5 +136,5 @@ def load_parameters(parameters_path):
         except Exception as e:
 
             # Raise exception if the .yaml file can't be parsed
-            logger.exception("Error loading config via load_parameters()")
+            logger.exception("Error loading yaml via load_parameters()")
             logger.exception(e)

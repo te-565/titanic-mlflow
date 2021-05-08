@@ -72,9 +72,9 @@ def ingest_split(
         df_holdout = pd.read_csv(holdout_raw_path)
 
         # Split the features and target
-        X = df_train.set_index(uid).drop(target, axis=1)
-        y = df_train.set_index(uid)[[target]]
-        X_holdout = df_holdout.set_index(uid)
+        X = df_train.drop(target, axis=1)
+        y = df_train[[target]]
+        X_holdout = df_holdout
 
         # Train Test split
         X_train, X_test, y_train, y_test = train_test_split(
@@ -84,8 +84,13 @@ def ingest_split(
             test_size=test_size,
             random_state=random_state
         )
+        
+        return X_train, X_test, y_train, y_test, X_holdout
 
     except Exception as e:
-        logger.exception(f"Error running ingest_split {e}")
+        logger.exception(
+            "Error importing and splitting the data via ingest_split()"
+        )
+        logger.exception(e)
 
-    return X_train, X_test, y_train, y_test, X_holdout
+

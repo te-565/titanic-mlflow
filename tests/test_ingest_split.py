@@ -23,8 +23,8 @@ def test_ingest_split():
 
     # Run the tests
     for df in [X_train, X_test, X_holdout]:
-        df.index.name == 'PassengerId'
         df.columns.tolist() == [
+            'PassengerId',
             'Pclass',
             'Name',
             'Sex',
@@ -38,5 +38,4 @@ def test_ingest_split():
         ]
 
     for df in [y_train, y_test]:
-        df.index.name == 'PassengerId'
         df.columns.tolist() == ["Survived"]
