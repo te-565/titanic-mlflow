@@ -2,6 +2,7 @@
 .vscode
 .DS_Store
 .env
+.env-test
 Main.ipynb
 data/dummy/*.csv
 data/holdout/*.csv
