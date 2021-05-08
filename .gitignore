@@ -1,6 +1,8 @@
 # Custom
+.vscode
 .DS_Store
 .env
+.env-test
 Main.ipynb
 data/dummy/*.csv
 data/holdout/*.csv
@@ -9,6 +11,7 @@ mlruns/*
 !mlruns/.gitkeep
 data/*
 !.gitkeep
+titanic.code-workspace
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

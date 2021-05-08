@@ -1,0 +1,7 @@
+target: "Survived"
+uid: "PassengerId"
+
+ingest_split_parameters:  
+  random_state: 43
+  train_size: 0.5
+  test_size: 0.5
