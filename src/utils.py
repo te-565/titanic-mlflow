@@ -49,7 +49,7 @@ def load_config(env_path):
         return config
 
     except Exception as e:
-        logger.exception("Error loading config via load_config()")
+        logger.exception("Error in load_config()")
         logger.exception(e)
 
 
@@ -95,7 +95,7 @@ def load_logger(
         logger.add(logs_path)
 
     except Exception as e:
-        logger.exception("Error loading logger via load_logger()")
+        logger.exception("Error in load_logger()")
         logger.exception(e)
 
 
@@ -136,5 +136,5 @@ def load_parameters(parameters_path):
         except Exception as e:
 
             # Raise exception if the .yaml file can't be parsed
-            logger.exception("Error loading yaml via load_parameters()")
+            logger.exception("Error in load_parameters()")
             logger.exception(e)

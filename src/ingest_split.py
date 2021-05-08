@@ -60,7 +60,7 @@ def ingest_split(
     )
     """
 
-    logger.info("Starting ingest_split")
+    logger.info("Running ingest_split()")
     try:
         # Unpack Parameters
         train_size = ingest_split_parameters["train_size"]
@@ -84,13 +84,9 @@ def ingest_split(
             test_size=test_size,
             random_state=random_state
         )
-        
+
         return X_train, X_test, y_train, y_test, X_holdout
 
     except Exception as e:
-        logger.exception(
-            "Error importing and splitting the data via ingest_split()"
-        )
+        logger.exception("Error in ingest_split()")
         logger.exception(e)
-
-
