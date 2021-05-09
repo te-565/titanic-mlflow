@@ -1,6 +1,8 @@
+import re
 from loguru import logger
 import pandas as pd
-import re
+import numpy as np
+from sklearn.impute import SimpleImputer
 
 
 def set_df_index(
@@ -311,6 +313,14 @@ def create_family_size(
     ------
     Exception: Exception
         Generic exception for logging
+
+    Examples
+    --------
+    df = create_family_size(
+        df=df,
+        source_columns=["col1", "col2"],
+        dest_column="col3
+    )
     """
 
     logger.info("Running create_family_size()")
@@ -326,3 +336,55 @@ def create_family_size(
 
     except Exception:
         logger.exception("Error in create_family_size()")
+
+
+def impute_missing_values(
+    df: pd.core.frame.DataFrame,
+    strategy: str
+):
+    """
+    Description
+    -----------
+    Impute missing values for the dataframe via the specified strategy.
+
+    Parameters
+    ----------
+    df: pd.core.frame.DataFrame
+        The dataframe to be processed.
+
+    strategy: str
+        The strategy to use for imputation
+
+    Returns
+    -------
+    df_out: pd.core.frame.DataFrame.
+        The processed dataframe
+
+    Raises
+    ------
+    Exception: Exception
+        Generic exception for logging
+
+    Examples
+    --------
+    df = impute_missing_values(
+        df=df,
+        strategy="most_frequent
+    )
+    """
+    logger.info("Running impute_missing_values()")
+
+    try:
+        df_out = df.copy()
+
+        simple_imputer = SimpleImputer(
+            missing_values=np.nan,
+            strategy=strategy
+        )
+
+        df_out[:] = simple_imputer.fit_transform(df_out)
+
+        return df_out
+
+    except Exception:
+        logger.exception("Error in impute_missing_values()")

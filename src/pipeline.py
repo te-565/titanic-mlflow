@@ -1,11 +1,19 @@
+import numpy as np
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import FunctionTransformer
+from sklearn.preprocessing import (
+    FunctionTransformer,
+    StandardScaler,
+    OneHotEncoder
+)
+from sklearn.impute import SimpleImputer
+from sklearn.compose import ColumnTransformer
 from src import (
     set_df_index,
     create_title_cat,
     impute_age,
     create_family_size,
     drop_columns,
+    impute_missing_values
 )
 
 
@@ -47,8 +55,8 @@ def create_pipeline(
     )
     """
 
-    # Create the pipeline
-    pipeline = Pipeline([
+    # Create the pre-processing pipeline
+    preprocess_pipeline = Pipeline([
         ("Set dataframe index", FunctionTransformer(
             func=set_df_index,
             kw_args=pipeline_parameters["set_df_index_kw_args"]
@@ -68,7 +76,11 @@ def create_pipeline(
         ("Drop columns", FunctionTransformer(
             func=drop_columns,
             kw_args=pipeline_parameters["drop_columns_kw_args"]
+        )),
+        ("Impute missing values", FunctionTransformer(
+            func=impute_missing_values,
+            kw_args=pipeline_parameters["impute_missing_values_kw_args"]
         ))
     ])
 
-    return pipeline
+    return preprocess_pipeline

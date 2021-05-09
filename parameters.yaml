@@ -40,7 +40,7 @@ pipeline_parameters:
     age_codes:
       "gen_male": 30
       "gen_female": 35
-      "young_female" : 21
+      "young_female": 21
       "young_male": 5
       "other_male": 40
       "other_female": 50
@@ -56,5 +56,19 @@ pipeline_parameters:
       - Cabin
       - Fare
       - Name
+      - SibSp
+      - Parch
+      - Ticket
 
-  
+  impute_missing_values_kw_args:
+    strategy: most_frequent
+
+  scale_columns:
+    - Age
+    - FamilySize
+
+  one_hot_columns:
+    - PClass
+    - Sex
+    - Embarked
+    - TitleCategory

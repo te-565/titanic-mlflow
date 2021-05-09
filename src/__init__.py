@@ -9,7 +9,8 @@ from src.transforms import (
     create_title_cat,
     impute_age,
     create_family_size,
-    drop_columns
+    drop_columns,
+    impute_missing_values
 )
 from src.pipeline import create_pipeline
 
@@ -24,5 +25,6 @@ __all__ = [
     "impute_age",
     "drop_columns",
     "create_family_size",
-    "create_pipeline"
+    "create_pipeline",
+    "impute_missing_values"
 ]
