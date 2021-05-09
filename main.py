@@ -29,4 +29,3 @@ with mlflow.start_run():
 
     pipeline = create_pipeline(parameters["pipeline_parameters"])
 
-    print(type(pipeline))

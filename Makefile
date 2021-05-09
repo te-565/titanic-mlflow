@@ -64,6 +64,9 @@ create-kernel: ## Register the conda environment to Jupyter
 remove-kernel: ## Remove the conda environment from Jupyter
 	jupyter kernelspec uninstall $(CONDA_ENVIRONMENT_NAME)
 
+# Execution
+.PHONY: run-all
+
 
 # Tests
 .PHONY: tests
