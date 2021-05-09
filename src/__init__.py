@@ -11,9 +11,12 @@ from src.transforms import (
     create_family_size,
     drop_columns,
     impute_missing_values,
-    scaler
+    scaler,
+    one_hot_encoder
 )
-from src.pipeline import create_pipeline
+from src.preprocessing_pipeline import (
+    create_preprocessing_pipeline
+)
 
 
 __all__ = [
@@ -26,7 +29,8 @@ __all__ = [
     "impute_age",
     "drop_columns",
     "create_family_size",
-    "create_pipeline",
     "impute_missing_values",
-    "scaler"
+    "scaler",
+    "one_hot_encoder",
+    "create_preprocessing_pipeline"
 ]
