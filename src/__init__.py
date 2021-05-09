@@ -8,6 +8,7 @@ from src.transforms import (
     set_df_index,
     create_title_cat,
     impute_age,
+    create_family_size,
     drop_columns
 )
 from src.pipeline import create_pipeline
@@ -22,5 +23,6 @@ __all__ = [
     "create_title_cat",
     "impute_age",
     "drop_columns",
+    "create_family_size",
     "create_pipeline"
 ]

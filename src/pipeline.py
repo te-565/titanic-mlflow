@@ -1,10 +1,11 @@
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 from src import (
-    drop_columns,
+    set_df_index,
     create_title_cat,
     impute_age,
-    set_df_index
+    create_family_size,
+    drop_columns,
 )
 
 
@@ -45,29 +46,28 @@ def create_pipeline(
         ))
     )
     """
-    # Unpack kw_args
-    set_df_index_kw_args = pipeline_parameters["set_df_index_kw_args"]
-    create_title_cat_kw_args = pipeline_parameters["create_title_cat_kw_args"]
-    drop_columns_kw_args = pipeline_parameters["drop_columns_kw_args"]
-    impute_age_kw_args = pipeline_parameters["impute_age_kw_args"]
 
     # Create the pipeline
     pipeline = Pipeline([
         ("Set dataframe index", FunctionTransformer(
             func=set_df_index,
-            kw_args=set_df_index_kw_args
+            kw_args=pipeline_parameters["set_df_index_kw_args"]
         )),
         ("Create title_cat column", FunctionTransformer(
             func=create_title_cat,
-            kw_args=create_title_cat_kw_args
+            kw_args=pipeline_parameters["create_title_cat_kw_args"]
         )),
         ("Impute missing Age values", FunctionTransformer(
             func=impute_age,
-            kw_args=impute_age_kw_args
+            kw_args=pipeline_parameters["impute_age_kw_args"]
+        )),
+        ("Create family_size column", FunctionTransformer(
+            func=create_family_size,
+            kw_args=pipeline_parameters["create_family_size_kw_args"]
         )),
         ("Drop columns", FunctionTransformer(
             func=drop_columns,
-            kw_args=drop_columns_kw_args
+            kw_args=pipeline_parameters["drop_columns_kw_args"]
         ))
     ])
 

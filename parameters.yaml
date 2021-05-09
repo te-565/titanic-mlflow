@@ -45,6 +45,12 @@ pipeline_parameters:
       "other_male": 40
       "other_female": 50
 
+  create_family_size_kw_args:
+    source_columns:
+      - SibSp
+      - Parch
+    dest_column: FamilySize
+
   drop_columns_kw_args:
     drop_column_names:
       - Cabin

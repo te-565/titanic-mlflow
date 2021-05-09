@@ -218,7 +218,7 @@ def impute_age(
     Returns
     -------
     df: pandas.DataFrame
-        Transformed Dataframe
+        The processed dataframe.
 
     Raises
     ------
@@ -279,3 +279,50 @@ def impute_age(
 
     except Exception:
         logger.exception("Error in impute_age()")
+
+
+def create_family_size(
+    df: pd.core.frame.DataFrame,
+    source_columns: list,
+    dest_column: str
+):
+    """
+    Description
+    -----------
+    Create a column for family_size via summing the source_columns.
+
+    Parameters
+    ----------
+    df: pd.core.frame.DataFrame
+        The dataframe to be processed.
+
+    source_columns: list
+        The columns to be summed to calculate the family size.
+
+    dest_column: str
+        The destination column to contain the family size values.
+
+    Returns
+    -------
+    df_out: pd.core.frame.DataFrame.
+        The processed dataframe
+
+    Raises
+    ------
+    Exception: Exception
+        Generic exception for logging
+    """
+
+    logger.info("Running create_family_size()")
+
+    try:
+        df_out = df.copy()
+        df_out[dest_column] = df_out.apply(
+            lambda row: row[source_columns].sum() + 1,
+            axis=1
+        )
+
+        return df_out
+
+    except Exception:
+        logger.exception("Error in create_family_size()")
