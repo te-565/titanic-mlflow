@@ -3,6 +3,7 @@ from loguru import logger
 import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import MinMaxScaler
 
 
 def set_df_index(
@@ -383,6 +384,52 @@ def impute_missing_values(
         )
 
         df_out[:] = simple_imputer.fit_transform(df_out)
+
+        return df_out
+
+    except Exception:
+        logger.exception("Error in impute_missing_values()")
+
+
+def scaler(
+    df: pd.core.frame.DataFrame,
+    scale_columns: str
+):
+    """
+    Description
+    -----------
+    Scale the supplied scale_columns for the dataframe.
+
+    Parameters
+    ----------
+    df: pd.core.frame.DataFrame
+        The dataframe to be processed.
+
+    scale_columns: str
+        The strategy to use for imputation
+
+    Returns
+    -------
+    df_out: pd.core.frame.DataFrame.
+        The processed dataframe
+
+    Raises
+    ------
+    Exception: Exception
+        Generic exception for logging
+
+    """
+    try:
+        logger.info("Running scaler()")
+
+        df_out = df.copy()
+
+        for column in scale_columns:
+
+            scaler = MinMaxScaler()
+            df_out[column] = scaler.fit_transform(
+                df_out[column].values.reshape(-1, 1)
+            )
 
         return df_out
 

@@ -13,7 +13,8 @@ from src import (
     impute_age,
     create_family_size,
     drop_columns,
-    impute_missing_values
+    impute_missing_values,
+    scaler
 )
 
 
@@ -80,7 +81,12 @@ def create_pipeline(
         ("Impute missing values", FunctionTransformer(
             func=impute_missing_values,
             kw_args=pipeline_parameters["impute_missing_values_kw_args"]
+        )),
+        ("Scale numeric data", FunctionTransformer(
+            func=scaler,
+            kw_args=pipeline_parameters["scaler_kw_args"]
         ))
+        # One Hot
     ])
 
     return preprocess_pipeline

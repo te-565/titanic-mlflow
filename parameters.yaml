@@ -63,9 +63,10 @@ pipeline_parameters:
   impute_missing_values_kw_args:
     strategy: most_frequent
 
-  scale_columns:
-    - Age
-    - FamilySize
+  scaler_kw_args:
+    scale_columns:
+      - Age
+      - FamilySize
 
   one_hot_columns:
     - PClass
