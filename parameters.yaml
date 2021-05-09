@@ -68,8 +68,9 @@ pipeline_parameters:
       - Age
       - FamilySize
 
-  one_hot_columns:
-    - PClass
-    - Sex
-    - Embarked
-    - TitleCategory
+  one_hot_kw_args:
+    one_hot_columns:
+      - PClass
+      - Sex
+      - Embarked
+      - TitleCategory

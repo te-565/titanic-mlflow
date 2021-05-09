@@ -3,6 +3,7 @@ from src import (
     scaler
 )
 
+
 def test_scaler():
     """Test the scaler function"""
 
