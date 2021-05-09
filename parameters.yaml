@@ -13,7 +13,7 @@ pipeline_parameters:
 
   create_title_cat_kw_args:
     source_column: 'Name'
-    dest_column: 'title_cat'
+    dest_column: 'TitleCategory'
     title_codes:
       Mr: "gen_male"        
       Mrs: "gen_female"       
@@ -34,8 +34,21 @@ pipeline_parameters:
       Jonkheer: "other_male"
       Dona: "other_female"
 
+  impute_age_kw_args:
+    source_column: 'Age'
+    title_column: 'TitleCategory'
+    age_codes:
+      "gen_male": 30
+      "gen_female": 35
+      "young_female" : 21
+      "young_male": 5
+      "other_male": 40
+      "other_female": 50
+
   drop_columns_kw_args:
     drop_column_names:
       - Cabin
       - Fare
       - Name
+
+  

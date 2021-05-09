@@ -3,6 +3,7 @@ from sklearn.preprocessing import FunctionTransformer
 from src import (
     drop_columns,
     create_title_cat,
+    impute_age,
     set_df_index
 )
 
@@ -24,7 +25,7 @@ def create_pipeline(
     pipeline_parameters: dict
         Parameters containing the metadata associated with the pipeline
         transformations.
-        
+
     Returns
     -------
     pipeline: sklearn.pipeline.Pipeline
@@ -48,6 +49,7 @@ def create_pipeline(
     set_df_index_kw_args = pipeline_parameters["set_df_index_kw_args"]
     create_title_cat_kw_args = pipeline_parameters["create_title_cat_kw_args"]
     drop_columns_kw_args = pipeline_parameters["drop_columns_kw_args"]
+    impute_age_kw_args = pipeline_parameters["impute_age_kw_args"]
 
     # Create the pipeline
     pipeline = Pipeline([
@@ -59,10 +61,14 @@ def create_pipeline(
             func=create_title_cat,
             kw_args=create_title_cat_kw_args
         )),
+        ("Impute missing Age values", FunctionTransformer(
+            func=impute_age,
+            kw_args=impute_age_kw_args
+        )),
         ("Drop columns", FunctionTransformer(
             func=drop_columns,
             kw_args=drop_columns_kw_args
-        )),
+        ))
     ])
 
     return pipeline

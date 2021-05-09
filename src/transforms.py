@@ -153,8 +153,8 @@ def create_title_cat(
 
     # Define the extract_title function
     def extract_title(
-        row,
-        source_column
+        row: pd.core.series.Series,
+        source_column: str
     ):
         """
         Extracts the title from the supplied specified title_source_column via
@@ -188,3 +188,94 @@ def create_title_cat(
 
     except Exception:
         logger.exception("Error in create_title_cat()")
+
+
+def impute_age(
+    df: pd.core.frame.DataFrame,
+    source_column: str,
+    title_column: str,
+    age_codes: dict
+):
+    """
+    If the age of a passenger is missing, infer this based upon the passenger
+    title.
+
+    Parameters
+    ----------
+    df: pandas.DataFrame
+        The dataframe to be processed.
+
+    source_column: str
+        The column containing the age values.
+
+    title_column: str
+        The column containing the title_values.
+
+    age_codes: dict
+        Dictionary containing the title category values as keys (e.g. "gen_male"
+        "gen_female", and the age to infer as values.
+
+    Returns
+    -------
+    df: pandas.DataFrame
+        Transformed Dataframe
+
+    Raises
+    ------
+    Exception: Exception
+        Generic exception for logging
+
+    Examples
+    --------
+    df = impute_age(
+        df=df,
+        source_column="Age",
+        title_column="TitleCat",
+        age_codes=dict(
+            gen_male=30,
+            gen_female=35
+            . . .
+        )
+    )
+    """
+
+    logger.info("Running impute_age()")
+
+    def infer_age(
+        row: pd.core.series.Series,
+        source_column: str,
+        title_column: str,
+        age_codes: dict
+    ):
+        """Infers the age of a passenger based upon the passenger title,
+        Applied to a pandas dataframe"""
+
+        if(pd.isnull(row[source_column])):
+
+            # Iterate through the codes and assign an age based upon the title
+            for key, value in age_codes.items():
+                if row[title_column] == key:
+                    age = value
+
+        # Else return the age as an integer
+        else:
+            age = int(row[source_column])
+
+        return age
+
+    try:
+
+        # Apply the infer_age function to the pandas dataframe
+        df_out = df.copy()
+        df_out[source_column] = (
+            df_out.apply(
+                infer_age,
+                args=([source_column, title_column, age_codes]),
+                axis=1
+            )
+        )
+
+        return df_out
+
+    except Exception:
+        logger.exception("Error in impute_age()")
