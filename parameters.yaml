@@ -70,7 +70,7 @@ pipeline_parameters:
 
   one_hot_kw_args:
     one_hot_columns:
-      - PClass
+      - Pclass
       - Sex
       - Embarked
       - TitleCategory

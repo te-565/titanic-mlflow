@@ -3,7 +3,9 @@ from loguru import logger
 import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import (
+    MinMaxScaler
+)
 
 
 def set_df_index(
@@ -406,7 +408,7 @@ def scaler(
         The dataframe to be processed.
 
     scale_columns: str
-        The strategy to use for imputation
+        The columsn to apply scaling to.
 
     Returns
     -------
@@ -426,8 +428,8 @@ def scaler(
 
         for column in scale_columns:
 
-            scaler = MinMaxScaler()
-            df_out[column] = scaler.fit_transform(
+            scale = MinMaxScaler()
+            df_out[column] = scale.fit_transform(
                 df_out[column].values.reshape(-1, 1)
             )
 
@@ -435,3 +437,53 @@ def scaler(
 
     except Exception:
         logger.exception("Error in impute_missing_values()")
+
+
+def one_hot_encoder(
+    df: pd.core.frame.DataFrame,
+    one_hot_columns: str
+):
+    """
+    Description
+    -----------
+    One hot encode the supplied scale_columns for the dataframe.
+
+    Parameters
+    ----------
+    df: pd.core.frame.DataFrame
+        The dataframe to be processed.
+
+    one_hot_columns: str
+        The columns to apply one hot encoding to.
+
+    Returns
+    -------
+    df_out: pd.core.frame.DataFrame.
+        The processed dataframe
+
+    Raises
+    ------
+    Exception: Exception
+        Generic exception for logging
+    """
+
+    try:
+        logger.info("running one_hot_encoder()")
+
+        df_out = df.copy()
+
+        for column in one_hot_columns:
+            # Use pandas implementation as it's simpler
+            df_oh = pd.get_dummies(df_out[[column]])
+            df_out = pd.merge(
+                left=df_out.drop(column, axis=1),
+                right=df_oh,
+                left_index=True,
+                right_index=True,
+                how="left"
+            )
+
+        return df_out
+
+    except Exception:
+        logger.exception("Error in one_hot_encoder()")
