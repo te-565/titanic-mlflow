@@ -6,7 +6,6 @@ from loguru import logger
 def ingest_split(
     train_raw_path: str,
     holdout_raw_path: str,
-    uid: str,
     target: str,
     ingest_split_parameters: dict,
 ):
@@ -60,7 +59,7 @@ def ingest_split(
     )
     """
 
-    logger.info("Starting ingest_split")
+    logger.info("Running ingest_split()")
     try:
         # Unpack Parameters
         train_size = ingest_split_parameters["train_size"]
@@ -72,9 +71,9 @@ def ingest_split(
         df_holdout = pd.read_csv(holdout_raw_path)
 
         # Split the features and target
-        X = df_train.set_index(uid).drop(target, axis=1)
-        y = df_train.set_index(uid)[[target]]
-        X_holdout = df_holdout.set_index(uid)
+        X = df_train.drop(target, axis=1)
+        y = df_train[[target]]
+        X_holdout = df_holdout
 
         # Train Test split
         X_train, X_test, y_train, y_test = train_test_split(
@@ -85,7 +84,7 @@ def ingest_split(
             random_state=random_state
         )
 
-    except Exception as e:
-        logger.exception(f"Error running ingest_split {e}")
+        return X_train, X_test, y_train, y_test, X_holdout
 
-    return X_train, X_test, y_train, y_test, X_holdout
+    except Exception:
+        logger.exception("Error in ingest_split()")
