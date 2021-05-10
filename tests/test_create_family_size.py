@@ -1,45 +1,30 @@
-from src import (
-    load_config,
-    load_parameters,
-    ingest_split,
-    create_family_size
-)
+import pandas as pd
+from src import create_family_size
 
 
 def test_create_family_size():
     """Test the create_family_size function"""
 
-    # Load in the test configuration & parameters
-    config = load_config(".env-test")
-    parameters = load_parameters(parameters_path=config["parameters_path"])
-
-    # Unpack the parameters
-    uid = parameters["uid"]
-    create_family_size_kw_args = (
-        parameters["pipeline_parameters"]["create_family_size_kw_args"]
-    )
-    source_columns = create_family_size_kw_args["source_columns"]
-    dest_column = create_family_size_kw_args["dest_column"]
-
-    # Import the data
-    X_train, X_test, y_train, y_test, X_holdout = ingest_split(
-        train_raw_path=config["train_raw_path"],
-        holdout_raw_path=config["holdout_raw_path"],
-        target=parameters["target"],
-        ingest_split_parameters=parameters["ingest_split_parameters"]
-    )
+    # Create dummy data
+    data = [
+        dict(id=1, col1=1, col2=0),
+        dict(id=2, col1=3, col2=1),
+        dict(id=3, col1=0, col2=2),
+        dict(id=4, col1=3, col2=0),
+        dict(id=5, col1=0, col2=0),
+    ]
+    df = pd.DataFrame(data).set_index("id", drop=True)
 
     # Run the function
-    X_holdout = create_family_size(
-        df=X_holdout,
-        source_columns=source_columns,
-        dest_column=dest_column
+    df_out = create_family_size(
+        df=df,
+        source_columns=["col1", "col2"],
+        dest_column="col3"
     )
 
-    X_holdout = X_holdout.set_index(uid, drop=True)
-
     # Run the tests
-    assert X_holdout[dest_column].loc[1] == 6
-    assert X_holdout[dest_column].loc[9] == 11
-    assert X_holdout[dest_column].loc[10] == 1
-    assert X_holdout[dest_column].loc[19] == 2
+    assert df_out["col3"].loc[1] == 2
+    assert df_out["col3"].loc[2] == 5
+    assert df_out["col3"].loc[3] == 3
+    assert df_out["col3"].loc[4] == 4
+    assert df_out["col3"].loc[5] == 1

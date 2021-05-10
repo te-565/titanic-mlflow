@@ -1,33 +1,22 @@
-from src import (
-    load_config,
-    load_parameters,
-    ingest_split,
-    set_df_index
-)
+import pandas as pd
+from src import set_df_index
 
 
 def test_set_df_index():
     """Test the set_df_index function"""
 
-    # Load in the test configuration & parameters
-    config = load_config(".env-test")
-    parameters = load_parameters(parameters_path=config["parameters_path"])
+    # Create the data
+    data = [
+        dict(id=1, col1=10, col2="A", col3=1),
+        dict(id=2, col1=10, col2="A", col3=1),
+        dict(id=3, col1=10, col2="A", col3=1),
+        dict(id=4, col1=9, col2="B", col3=0),
+    ]
 
-    # Unpack the parameters
-    set_df_index_kw_args = (
-        parameters["pipeline_parameters"]["set_df_index_kw_args"]
-    )
-    df_index_col = set_df_index_kw_args["df_index_col"]
-
-    # Import the data
-    X_train, X_test, y_train, y_test, X_holdout = ingest_split(
-        train_raw_path=config["train_raw_path"],
-        holdout_raw_path=config["holdout_raw_path"],
-        target=parameters["target"],
-        ingest_split_parameters=parameters["ingest_split_parameters"]
-    )
+    df = pd.DataFrame(data)
 
     # Run the function
-    X_holdout = set_df_index(df=X_holdout, df_index_col=df_index_col)
+    df_out = set_df_index(df=df, df_index_col="id")
 
-    assert X_holdout.index.name == df_index_col
+    # Run the test
+    assert df_out.index.name == "id"

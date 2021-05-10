@@ -66,6 +66,10 @@ remove-kernel: ## Remove the conda environment from Jupyter
 
 # Execution
 .PHONY: run-all
+run-all:
+	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
+	python -m main
+	$(DEACTIVATE)
 
 
 # Tests

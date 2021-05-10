@@ -11,6 +11,10 @@ pipeline_parameters:
   set_df_index_kw_args:
     df_index_col: PassengerId
 
+  convert_to_str_kw_args:
+    convert_to_str_cols:
+      - Pclass
+
   create_title_cat_kw_args:
     source_column: 'Name'
     dest_column: 'TitleCategory'
@@ -29,14 +33,14 @@ pipeline_parameters:
       Sir: "other_male"       
       Mlle: "young_female"     
       Col: "other_male"       
-      Capt: "other_female"      
+      Capt: "other_male"      
       Countess: "other_female"  
       Jonkheer: "other_male"
       Dona: "other_female"
 
   impute_age_kw_args:
     source_column: 'Age'
-    title_column: 'TitleCategory'
+    title_cat_column: 'TitleCategory'
     age_codes:
       "gen_male": 30
       "gen_female": 35

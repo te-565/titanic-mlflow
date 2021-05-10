@@ -28,7 +28,7 @@ def test_one_hot_encoder():
 
     # Run the function
     df_out = one_hot_encoder(df=df, one_hot_columns=one_hot_columns)
-    
+
     # Run the tests
     assert df_out.columns.tolist() == [
         "col1_bar", "col1_foo", "col2_wibble", "col2_wubble"
@@ -37,5 +37,3 @@ def test_one_hot_encoder():
     assert df_out["col1_bar"].tolist() == [0, 0, 1, 1, 1]
     assert df_out["col2_wibble"].tolist() == [1, 1, 0, 1, 0]
     assert df_out["col2_wubble"].tolist() == [0, 0, 1, 0, 1]
-    
-    

@@ -3,6 +3,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 from src import (
     set_df_index,
+    convert_to_str,
     create_title_cat,
     impute_age,
     create_family_size,
@@ -60,6 +61,10 @@ def create_preprocessing_pipeline(
             ("Set dataframe index", FunctionTransformer(
                 func=set_df_index,
                 kw_args=pipeline_parameters["set_df_index_kw_args"]
+            )),
+            ("Convert cols to string", FunctionTransformer(
+                func=convert_to_str,
+                kw_args=pipeline_parameters["convert_to_str_kw_args"]
             )),
             ("Create title_cat column", FunctionTransformer(
                 func=create_title_cat,

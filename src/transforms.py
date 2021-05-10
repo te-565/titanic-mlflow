@@ -54,6 +54,54 @@ def set_df_index(
     return df_out
 
 
+def convert_to_str(
+    df: pd.core.frame.DataFrame,
+    convert_to_str_cols: list
+):
+    """
+    Description
+    -----------
+    Converts the supplied columns to strings for the supplied DataFrame
+
+    Parameters
+    ----------
+    df: pandas.core.frame.DataFrame
+        The dataframe to be processed
+
+    convert_to_str_cols: list
+        The names of the columns to convert to strings
+
+    Returns
+    -------
+    df_out: pandas.DataFrame
+        The processed pandas Dataframe
+
+    Raises
+    ------
+    Exception: Exception
+        Generic exception for logging
+
+    Examples
+    --------
+    df_out = convert_to_str(
+        df=df
+        convert_to_str_cols="col1"
+    )
+    """
+    logger.info("Running convert_to_str()")
+
+    df_out = df.copy()
+
+    try:
+        for column in convert_to_str_cols:
+            df_out[column] = df_out[column].astype(str)
+
+        return df_out
+
+    except Exception:
+        logger.exception("Error in drop_columns()")
+
+
 def drop_columns(
     df: pd.core.frame.DataFrame,
     drop_column_names: list,
@@ -198,7 +246,7 @@ def create_title_cat(
 def impute_age(
     df: pd.core.frame.DataFrame,
     source_column: str,
-    title_column: str,
+    title_cat_column: str,
     age_codes: dict
 ):
     """
@@ -213,8 +261,8 @@ def impute_age(
     source_column: str
         The column containing the age values.
 
-    title_column: str
-        The column containing the title_values.
+    title_cat_column: str
+        The column containing the title category values.
 
     age_codes: dict
         Dictionary containing the title category values as keys (e.g. "gen_male"
@@ -235,7 +283,7 @@ def impute_age(
     df = impute_age(
         df=df,
         source_column="Age",
-        title_column="TitleCat",
+        title_cat_column="TitleCat",
         age_codes=dict(
             gen_male=30,
             gen_female=35
@@ -249,7 +297,7 @@ def impute_age(
     def infer_age(
         row: pd.core.series.Series,
         source_column: str,
-        title_column: str,
+        title_cat_column: str,
         age_codes: dict
     ):
         """Infers the age of a passenger based upon the passenger title,
@@ -259,7 +307,7 @@ def impute_age(
 
             # Iterate through the codes and assign an age based upon the title
             for key, value in age_codes.items():
-                if row[title_column] == key:
+                if row[title_cat_column] == key:
                     age = value
 
         # Else return the age as an integer
@@ -275,7 +323,7 @@ def impute_age(
         df_out[source_column] = (
             df_out.apply(
                 infer_age,
-                args=([source_column, title_column, age_codes]),
+                args=([source_column, title_cat_column, age_codes]),
                 axis=1
             )
         )
@@ -348,7 +396,12 @@ def impute_missing_values(
     """
     Description
     -----------
-    Impute missing values for the dataframe via the specified strategy.
+    Impute missing values for the dataframe via the specified strategy. Creates
+    separate imputers for:
+        * np.nan
+        * None
+        * "" (empty strings)
+        * int
 
     Parameters
     ----------
@@ -380,12 +433,28 @@ def impute_missing_values(
     try:
         df_out = df.copy()
 
-        simple_imputer = SimpleImputer(
+        # Create imputers for various dtypes
+        nan_imputer = SimpleImputer(
             missing_values=np.nan,
             strategy=strategy
         )
+        none_imputer = SimpleImputer(
+            missing_values=None,
+            strategy=strategy
+        )
+        str_imputer = SimpleImputer(
+            missing_values="",
+            strategy=strategy
+        )
+        int_imputer = SimpleImputer(
+            missing_values=int,
+            strategy=strategy
+        )
 
-        df_out[:] = simple_imputer.fit_transform(df_out)
+        df_out[:] = nan_imputer.fit_transform(df_out)
+        df_out[:] = none_imputer.fit_transform(df_out)
+        df_out[:] = str_imputer.fit_transform(df_out)
+        df_out[:] = int_imputer.fit_transform(df_out)
 
         return df_out
 
