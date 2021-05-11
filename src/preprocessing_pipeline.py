@@ -10,12 +10,14 @@ from src import (
     drop_columns,
     impute_missing_values,
     scaler,
-    one_hot_encoder
+    one_hot_encoder,
+    export_transform
 )
 
 
 def create_preprocessing_pipeline(
-    pipeline_parameters: dict
+    pipeline_parameters: dict,
+    features_path: str
 ):
     """
     Description
@@ -36,6 +38,9 @@ def create_preprocessing_pipeline(
         Parameters containing the metadata associated with the pipeline
         transformations.
 
+    features_path: str
+        Location to save the .csv file of features
+
     Returns
     -------
     preprocessing_pipeline: sklearn.pipeline.Pipeline
@@ -55,48 +60,53 @@ def create_preprocessing_pipeline(
         ))
     )
     """
-    try:
-        # Create the pre-processing pipeline
-        preprocessing_pipeline = Pipeline([
-            ("Set dataframe index", FunctionTransformer(
-                func=set_df_index,
-                kw_args=pipeline_parameters["set_df_index_kw_args"]
-            )),
-            ("Convert cols to string", FunctionTransformer(
-                func=convert_to_str,
-                kw_args=pipeline_parameters["convert_to_str_kw_args"]
-            )),
-            ("Create title_cat column", FunctionTransformer(
-                func=create_title_cat,
-                kw_args=pipeline_parameters["create_title_cat_kw_args"]
-            )),
-            ("Impute missing Age values", FunctionTransformer(
-                func=impute_age,
-                kw_args=pipeline_parameters["impute_age_kw_args"]
-            )),
-            ("Create family_size column", FunctionTransformer(
-                func=create_family_size,
-                kw_args=pipeline_parameters["create_family_size_kw_args"]
-            )),
-            ("Drop columns", FunctionTransformer(
-                func=drop_columns,
-                kw_args=pipeline_parameters["drop_columns_kw_args"]
-            )),
-            ("Impute missing values", FunctionTransformer(
-                func=impute_missing_values,
-                kw_args=pipeline_parameters["impute_missing_values_kw_args"]
-            )),
-            ("Scale numeric data", FunctionTransformer(
-                func=scaler,
-                kw_args=pipeline_parameters["scaler_kw_args"]
-            )),
-            ("One hot encode categorical data", FunctionTransformer(
-                func=one_hot_encoder,
-                kw_args=pipeline_parameters["one_hot_kw_args"]
-            ))
-        ])
+    # Create the export_log_kw_args
+    export_log_kw_args = dict(
+        features_path=features_path
+    )
 
-        return preprocessing_pipeline
+    # Create the pre-processing pipeline
+    preprocessing_pipeline = Pipeline([
+        ("Set dataframe index", FunctionTransformer(
+            func=set_df_index,
+            kw_args=pipeline_parameters["set_df_index_kw_args"]
+        )),
+        ("Convert cols to string", FunctionTransformer(
+            func=convert_to_str,
+            kw_args=pipeline_parameters["convert_to_str_kw_args"]
+        )),
+        ("Create title_cat column", FunctionTransformer(
+            func=create_title_cat,
+            kw_args=pipeline_parameters["create_title_cat_kw_args"]
+        )),
+        ("Impute missing Age values", FunctionTransformer(
+            func=impute_age,
+            kw_args=pipeline_parameters["impute_age_kw_args"]
+        )),
+        ("Create family_size column", FunctionTransformer(
+            func=create_family_size,
+            kw_args=pipeline_parameters["create_family_size_kw_args"]
+        )),
+        ("Drop columns", FunctionTransformer(
+            func=drop_columns,
+            kw_args=pipeline_parameters["drop_columns_kw_args"]
+        )),
+        ("Impute missing values", FunctionTransformer(
+            func=impute_missing_values,
+            kw_args=pipeline_parameters["impute_missing_values_kw_args"]
+        )),
+        ("Scale numeric data", FunctionTransformer(
+            func=scaler,
+            kw_args=pipeline_parameters["scaler_kw_args"]
+        )),
+        ("One hot encode categorical data", FunctionTransformer(
+            func=one_hot_encoder,
+            kw_args=pipeline_parameters["one_hot_kw_args"]
+        )),
+        ("Export & Transform", FunctionTransformer(
+            func=export_transform,
+            kw_args=export_log_kw_args
+        ))
+    ])
 
-    except Exception:
-        logger.exception("Error in preprocessing_pipeline()")
+    return preprocessing_pipeline
