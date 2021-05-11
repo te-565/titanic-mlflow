@@ -16,15 +16,16 @@ def test_preprocessing_pipeline():
 
     # Ingest the data
     X_train, X_test, y_train, y_test, X_holdout = ingest_split(
-        train_raw_path=config["train_raw_path"],
+        train_test_raw_path=config["train_test_raw_path"],
         holdout_raw_path=config["holdout_raw_path"],
         target=parameters["target"],
         ingest_split_parameters=parameters["ingest_split_parameters"]
     )
 
     # Run the function
-    preprocess_pipeline = (
-        create_preprocessing_pipeline(parameters["pipeline_parameters"])
+    preprocess_pipeline = create_preprocessing_pipeline(
+        pipeline_parameters=parameters["pipeline_parameters"],
+        features_path=config["train_features_path"]
     )
     X_holdout = (
         preprocess_pipeline.fit_transform(X_holdout)
