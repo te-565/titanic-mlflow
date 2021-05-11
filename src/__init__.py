@@ -13,10 +13,20 @@ from src.transforms import (
     drop_columns,
     impute_missing_values,
     scaler,
-    one_hot_encoder
+    one_hot_encoder,
+    export_transform
 )
 from src.preprocessing_pipeline import (
     create_preprocessing_pipeline
+)
+from src.logreg_model import (
+    create_logreg_model
+)
+from src.model_pipeline import (
+    create_model_pipeline
+)
+from src.score import (
+    score_model
 )
 
 
@@ -34,5 +44,9 @@ __all__ = [
     "impute_missing_values",
     "scaler",
     "one_hot_encoder",
-    "create_preprocessing_pipeline"
+    "export_transform",
+    "create_preprocessing_pipeline",
+    "create_logreg_model",
+    "create_model_pipeline",
+    "score_model"
 ]

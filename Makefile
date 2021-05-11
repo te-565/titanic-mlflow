@@ -22,7 +22,7 @@ create-environment: ## Create the env, install packages, create a kernel and wri
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
 	conda install --yes --file requirements-conda.txt && \
 	pip install -r requirements-pip.txt && \
-	conda env export > environment.yaml && 
+	conda env export > environment.yaml
 	$(DEACTIVATE)
 
 .PHONY: install-all-requirements

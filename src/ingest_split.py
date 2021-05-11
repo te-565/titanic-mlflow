@@ -1,10 +1,11 @@
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from loguru import logger
 
 
 def ingest_split(
-    train_raw_path: str,
+    train_test_raw_path: str,
     holdout_raw_path: str,
     target: str,
     ingest_split_parameters: dict,
@@ -60,31 +61,37 @@ def ingest_split(
     """
 
     logger.info("Running ingest_split()")
-    try:
-        # Unpack Parameters
-        train_size = ingest_split_parameters["train_size"]
-        test_size = ingest_split_parameters["test_size"]
-        random_state = ingest_split_parameters["random_state"]
 
-        # Import train & holdout datasets
-        df_train = pd.read_csv(train_raw_path)
-        df_holdout = pd.read_csv(holdout_raw_path)
+    # Unpack Parameters
+    train_size = ingest_split_parameters["train_size"]
+    test_size = ingest_split_parameters["test_size"]
+    random_state = ingest_split_parameters["random_state"]
 
-        # Split the features and target
-        X = df_train.drop(target, axis=1)
-        y = df_train[[target]]
-        X_holdout = df_holdout
+    # Import train & holdout datasets
+    df_train = pd.read_csv(train_test_raw_path)
+    df_holdout = pd.read_csv(holdout_raw_path)
 
-        # Train Test split
-        X_train, X_test, y_train, y_test = train_test_split(
-            X,
-            y,
-            train_size=train_size,
-            test_size=test_size,
-            random_state=random_state
-        )
+    # Convert ints to floats
+    for column in df_train.columns.tolist():
+        if isinstance(df_train[column], np.int64):
+            df_train[column] = df_train[column].astype(float)
 
-        return X_train, X_test, y_train, y_test, X_holdout
+    for column in df_holdout.columns.tolist():
+        if isinstance(df_train[column], np.int64):
+            df_train[column] = df_train[column].astype(float)
 
-    except Exception:
-        logger.exception("Error in ingest_split()")
+    # Split the features and target
+    X = df_train.drop(target, axis=1)
+    y = df_train[[target]]
+    X_holdout = df_holdout
+
+    # Train Test split
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        train_size=train_size,
+        test_size=test_size,
+        random_state=random_state
+    )
+
+    return X_train, X_test, y_train, y_test, X_holdout
