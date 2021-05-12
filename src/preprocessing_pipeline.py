@@ -102,10 +102,6 @@ def create_preprocessing_pipeline(
         ("One hot encode categorical data", FunctionTransformer(
             func=one_hot_encoder,
             kw_args=pipeline_parameters["one_hot_kw_args"]
-        )),
-        ("Export & Transform", FunctionTransformer(
-            func=export_transform,
-            kw_args=export_log_kw_args
         ))
     ])
 

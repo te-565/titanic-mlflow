@@ -555,16 +555,17 @@ def one_hot_encoder(
     return df_out
 
 
-
 def export_transform(
     df: pd.core.frame.DataFrame,
-    features_path: str,
+    features_path: str
 ):
     """
     Description
     -----------
     Export the pipeline data to a .csv file and log the feature names as mlflow
     artifacts.
+    
+    NOTE: Presently not used in the pipeline.
 
     Parameters
     ----------
@@ -598,6 +599,6 @@ def export_transform(
     logger.info("running export_log()")
 
     # Export the .csv file
-    df.to_csv(f"{features_path}", index=False)
+    df.reset_index().to_csv(f"{features_path}", index=False)
 
     return df
