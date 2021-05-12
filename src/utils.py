@@ -34,12 +34,14 @@ def load_config(env_path):
     """
 
     try:
-        load_dotenv(env_path)
+        load_dotenv(env_path, override=True)
         config = dict(
             app_name=os.getenv("APP_NAME"),
             parameters_path=os.getenv("PARAMETERS_PATH"),
             artifact_path=os.getenv("ARTIFACT_PATH"),
+            models_path=os.getenv("MODELS_PATH"),
             logs_path=os.getenv("LOGS_PATH"),
+            mlflow_tracking_db=os.getenv("MLFLOW_TRACKING_DB"),
             mlflow_tracking_uri=os.getenv("MLFLOW_TRACKING_URI"),
             mlflow_experiment=os.getenv("MLFLOW_EXPERIMENT"),
             train_test_raw_path=os.getenv("TRAIN_TEST_RAW_PATH"),

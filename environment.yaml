@@ -54,8 +54,8 @@ dependencies:
   - gettext=0.19.8.1=h7937167_1005
   - gitdb=4.0.7=pyhd8ed1ab_0
   - gitpython=3.1.15=pyhd8ed1ab_0
-  - glib=2.68.1=he49afe7_0
-  - glib-tools=2.68.1=he49afe7_0
+  - glib=2.68.2=he49afe7_0
+  - glib-tools=2.68.2=he49afe7_0
   - greenlet=1.1.0=py38ha048514_0
   - gunicorn=20.1.0=py38h50d1736_0
   - htmlmin=0.1.12=py_1
@@ -92,7 +92,7 @@ dependencies:
   - libffi=3.3=h046ec9c_2
   - libgfortran=5.0.0=9_3_0_h6c81a4c_22
   - libgfortran5=9.3.0=h6c81a4c_22
-  - libglib=2.68.1=hd556434_0
+  - libglib=2.68.2=hd556434_0
   - libiconv=1.16=haf1e3a3_0
   - liblapack=3.9.0=9_openblas
   - libllvm10=10.0.1=h009f743_3
@@ -139,7 +139,7 @@ dependencies:
   - openssl=1.1.1k=h0d85af4_0
   - packaging=20.9=pyh44b312d_0
   - pandas=1.2.4=py38h1f261ad_0
-  - pandas-profiling=2.13.0=pyhd8ed1ab_0
+  - pandas-profiling=3.0.0=pyhd8ed1ab_0
   - pandoc=2.13=h0d85af4_0
   - pandocfilters=1.4.2=py_1
   - parso=0.8.2=pyhd8ed1ab_0

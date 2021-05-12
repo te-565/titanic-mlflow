@@ -83,8 +83,8 @@ def ingest_split(
             df_train[column] = df_train[column].astype(float)
 
     for column in df_holdout.columns.tolist():
-        if isinstance(df_train[column], np.int64):
-            df_train[column] = df_train[column].astype(float)
+        if isinstance(df_holdout[column], np.int64):
+            df_holdout[column] = df_holdout[column].astype(float)
 
     # Split the features and target
     X = df_train.drop(target, axis=1)

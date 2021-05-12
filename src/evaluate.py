@@ -28,15 +28,19 @@ def evaluate_model(
     """
     TODO
     """
-    logger.info("Evaluating Model")
+    
 
     # Generate train & test features
+    logger.info("Running train preprocessing")
     X_train_features = preprocessing_pipeline.fit_transform(X_train)
+    logger.info("Running test preprocessing")
     X_test_features = preprocessing_pipeline.fit_transform(X_test)
 
+    logger.info("Fitting model")
     # Fit the model & generate predictions
     model.fit(X=X_train_features, y=y_train.values.ravel())
 
+    logger.info("Scoring model")
     # Basic Scores
     train_score = model.score(
         X=X_train_features,
@@ -87,6 +91,7 @@ def evaluate_model(
         average="macro"
     )
 
+    logger.info("Creating visualisations")
     # Learning Curve Visualisation
     learning_curve = LearningCurve(
         model,
@@ -131,6 +136,8 @@ def evaluate_model(
     plt.savefig(fname=outpath)
     mlflow.log_artifact(outpath)
     plt.close()
+
+    logger.info("Saving data, artifacts & metrics")
 
     # Save Train & Test data
     X_train_features.reset_index().to_csv(f"{artifact_path}/X_train.csv")

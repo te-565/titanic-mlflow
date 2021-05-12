@@ -1,12 +1,12 @@
 # Based on: https://towardsdatascience.com/create-virtualenv-for-data-science-projects-with-one-command-only-7bec3548419f
 
 # Load in Environment Variables
+include .env.dev
+export $(shell sed 's/=.*//' .env.dev)
 
 # Variables
 ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda activate
 DEACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda deactivate ; conda deactivate
-CONDA_ENVIRONMENT_NAME=titanic-mlflow-env
-PYTHON_VERSION=3.8
 
 # Help
 .DEFAULT_GOAL := help
@@ -16,7 +16,7 @@ help:
 
 
 # Environment Management
-.PHONY: create-environment
+.PHONY: create-environment 
 create-environment: ## Create the env, install packages, create a kernel and write to environment.yaml
 	conda create --name $(CONDA_ENVIRONMENT_NAME) --channel conda-forge --yes python=$(PYTHON_VERSION)
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
@@ -65,14 +65,14 @@ remove-kernel: ## Remove the conda environment from Jupyter
 	jupyter kernelspec uninstall $(CONDA_ENVIRONMENT_NAME)
 
 # Execution
-.PHONY: run
-run:
+.PHONY: run-experiment
+run-experiment: ## For experimentation: Runs the pipeline
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
 	python -m main
 	$(DEACTIVATE)
 
-.PHONY: run-deploy
-run-deploy:
+.PHONY: run-deployment
+run-deployment: ## For deployment: Creates a deployable version of the model
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
 	python -m main --deploy
 	$(DEACTIVATE)
@@ -86,18 +86,31 @@ tests: ## Runs the tests for the application & reports test coverage
 	$(DEACTIVATE)
 
 
-# MLFlow UI
+# MLFlow
+.PHONY: create-db-dev
+create-db-dev: ## Creates a backend sqlite database to store MLFlow dev data
+	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
+	python -m create_db --env-path=./.env.dev
+	$(DEACTIVATE) 
+
+
+.PHONY: create-db-test
+create-db-test: ## Creates a backend sqlite database to store MLFlow test data
+	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
+	python -m create_db --env-path=./.env.test
+	$(DEACTIVATE) 
+
 .PHONY: mlflow-server
-mlflow: ## Start the MLFlow webserver
+mlflow-server: ## Start the MLFlow webserver
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
 	mlflow server \
 	--port 5000 \
-	--backend-store-uri mlruns/
+	--backend-store-uri $(MLFLOW_TRACKING_URI) \
+	--default-artifact-root $(ARTIFACT_PATH) 
 
-.PHONY: serve-model
-serve-model: ## Serves the model
+.PHONY: mlflow-serve-model
+mlflow-serve-model: ## Serves the model
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
-	mlflow models serve \
-	--model-uri mlruns/2/ \
-	--host 0.0.0.0 \
-	--port 5003 
+	mlflow models serve -m $(MODELS_PATH)/logreg_v000 \
+	-p 1234 \
+	--no-conda

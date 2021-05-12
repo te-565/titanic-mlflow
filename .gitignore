@@ -2,8 +2,8 @@
 .vscode
 .DS_Store
 .env
-.env-dev
-.env-test
+.env.dev
+.env.test
 Main.ipynb
 data/dummy/*.csv
 data/holdout/*.csv
@@ -15,6 +15,10 @@ data/!.gitkeep
 artifacts/*
 artifacts/!.gitkeep
 titanic.code-workspace
+db/
+db/!gitkeep
+stuff.txt
+Requests.ipynb
 
 
 # Byte-compiled / optimized / DLL files

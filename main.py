@@ -18,7 +18,7 @@ def run(deploy: bool = False):
     """Run the end-to-end pipeline"""
 
     # Load config, logger & parameters
-    config = load_config(".env")
+    config = load_config(".env.dev")
     logger = load_logger(
         app_name=config["app_name"],
         logs_path=config["logs_path"]
@@ -76,7 +76,10 @@ def run(deploy: bool = False):
                 X_train=X_train,
                 y_train=y_train,
                 artifact_path=config["artifact_path"],
+                models_path=f"{config['models_path']}/{model_name}/"
             )
+
+        mlflow.end_run()
 
 
 if __name__ == "__main__":

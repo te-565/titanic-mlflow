@@ -13,7 +13,8 @@ def create_model_pipeline(
     model_name: str,
     X_train: pd.core.frame.DataFrame,
     y_train: pd.core.frame.DataFrame,
-    artifact_path: str
+    artifact_path: str,
+    models_path: str
 ):
     """
 
@@ -35,12 +36,20 @@ def create_model_pipeline(
         model_output=model_pipeline.predict(X_train)
     )
 
-    # Log the model
+    # Log the model as an artifact
     mlflow.sklearn.log_model(
-        sk_model=model,
+        sk_model=model_pipeline,
         artifact_path=artifact_path,
         conda_env="./environment.yaml",
         registered_model_name=model_name,
+        signature=signature
+    )
+
+    # Save the model for serving
+    mlflow.sklearn.save_model(
+        sk_model=model_pipeline,
+        path=models_path,
+        conda_env="./environment.yaml",
         signature=signature
     )
 
