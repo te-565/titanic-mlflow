@@ -11,6 +11,7 @@ pyyaml
 mlflow=1.17.0
 loguru
 python-dotenv
+sqllite3
 
 # Dev
 pip

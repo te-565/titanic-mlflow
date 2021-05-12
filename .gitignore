@@ -11,7 +11,9 @@ data/train/*.csv
 mlruns/*
 !mlruns/.gitkeep
 data/*
-!.gitkeep
+data/!.gitkeep
+artifacts/*
+artifacts/!.gitkeep
 titanic.code-workspace
 
 

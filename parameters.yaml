@@ -3,8 +3,8 @@ uid: PassengerId
 
 ingest_split_parameters:  
   random_state: 43
-  train_size: 0.5
-  test_size: 0.5
+  train_size: 0.4
+  test_size: 0.6
 
 pipeline_parameters:
 
@@ -103,8 +103,17 @@ logreg_hyperparameters:
   model_name: logreg_v000
   model_type: Logistic Regression
   penalty: l2
-  C: 0.5
-  max_iter: 190
+  C: 0.2
+  max_iter: 100
   solver: lbfgs
   n_jobs: -1
-  cv: 10
+  cv: 5
+
+svc_hyperparameters:
+  model_name: svc_v000
+  model_type: SVC
+  C: 0.5
+  kernel: linear
+  probability: True
+  max_iter: -1
+  cv: 5

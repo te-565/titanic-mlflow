@@ -22,11 +22,14 @@ from src.preprocessing_pipeline import (
 from src.logreg_model import (
     create_logreg_model
 )
+from src.svc_model import (
+    create_svc_model
+)
+from src.evaluate import (
+    evaluate_model
+)
 from src.model_pipeline import (
     create_model_pipeline
-)
-from src.score import (
-    score_model
 )
 
 
@@ -47,6 +50,7 @@ __all__ = [
     "export_transform",
     "create_preprocessing_pipeline",
     "create_logreg_model",
-    "create_model_pipeline",
-    "score_model"
+    "create_svc_model",
+    "evaluate_model",
+    "create_model_pipeline"
 ]

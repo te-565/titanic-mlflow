@@ -65,12 +65,17 @@ remove-kernel: ## Remove the conda environment from Jupyter
 	jupyter kernelspec uninstall $(CONDA_ENVIRONMENT_NAME)
 
 # Execution
-.PHONY: run-all
-run-all:
+.PHONY: run
+run:
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
 	python -m main
 	$(DEACTIVATE)
 
+.PHONY: run-deploy
+run-deploy:
+	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
+	python -m main --deploy
+	$(DEACTIVATE)
 
 # Tests
 .PHONY: tests
@@ -88,3 +93,11 @@ mlflow: ## Start the MLFlow webserver
 	mlflow server \
 	--port 5000 \
 	--backend-store-uri mlruns/
+
+.PHONY: serve-model
+serve-model: ## Serves the model
+	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
+	mlflow models serve \
+	--model-uri mlruns/2/ \
+	--host 0.0.0.0 \
+	--port 5003 

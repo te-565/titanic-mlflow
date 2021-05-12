@@ -38,7 +38,7 @@ def load_config(env_path):
         config = dict(
             app_name=os.getenv("APP_NAME"),
             parameters_path=os.getenv("PARAMETERS_PATH"),
-            artifacts_path=os.getenv("ARTIFACTS_PATH"),
+            artifact_path=os.getenv("ARTIFACT_PATH"),
             logs_path=os.getenv("LOGS_PATH"),
             mlflow_tracking_uri=os.getenv("MLFLOW_TRACKING_URI"),
             mlflow_experiment=os.getenv("MLFLOW_EXPERIMENT"),
