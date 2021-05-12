@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import mlflow
 from sklearn.model_selection import train_test_split
 from loguru import logger
 
@@ -66,6 +67,11 @@ def ingest_split(
     train_size = ingest_split_parameters["train_size"]
     test_size = ingest_split_parameters["test_size"]
     random_state = ingest_split_parameters["random_state"]
+
+    # Log MLflow parameters
+    mlflow.log_param("train_size", train_size)
+    mlflow.log_param("test_size", test_size)
+    mlflow.log_param("random_state", random_state)
 
     # Import train & holdout datasets
     df_train = pd.read_csv(train_test_raw_path)
