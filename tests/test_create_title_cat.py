@@ -1,9 +1,9 @@
 import pandas as pd
-from src import (
+from src.utils import (
     load_config,
     load_parameters,
-    create_title_cat
 )
+from src.preprocessing_pipeline import create_title_cat
 
 
 def test_create_title_cat():

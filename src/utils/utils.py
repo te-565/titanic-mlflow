@@ -92,7 +92,9 @@ def load_logger(
             format="{time} {level} {message}",
             filter=app_name,
             level="INFO",
-            colorize=True
+            colorize=True,
+            backtrace=False,
+            diagnose=True
         )
         logs_path = "{}/{}.log".format(logs_path, "{time}")
         logger.add(logs_path)

@@ -1,5 +1,5 @@
 import pandas as pd
-from src import one_hot_encoder
+from src.preprocessing_pipeline import one_hot_encoder
 
 
 def test_one_hot_encoder():

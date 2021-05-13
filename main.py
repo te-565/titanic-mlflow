@@ -1,13 +1,17 @@
 import plac
 import mlflow
-from src import (
+from src.utils import (
     load_config,
     load_logger,
-    load_parameters,
-    ingest_split,
-    create_preprocessing_pipeline,
+    load_parameters
+)
+from src.ingest_split import ingest_split
+from src.preprocessing_pipeline import create_preprocessing_pipeline
+from src.models import (
     create_logreg_model,
-    create_svc_model,
+    create_svc_model
+)
+from src.model_pipeline import (
     evaluate_model,
     create_model_pipeline
 )
@@ -46,8 +50,7 @@ def run(deploy: bool = False):
 
         # Create the preprocessing pipeline
         preprocessing_pipeline = create_preprocessing_pipeline(
-            pipeline_parameters=parameters["pipeline_parameters"],
-            features_path=config["train_features_path"]
+            pipeline_parameters=parameters["pipeline_parameters"]
         )
 
         # Create a model with hyperparameters

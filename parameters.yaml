@@ -103,7 +103,7 @@ logreg_hyperparameters:
   model_name: logreg_v000
   model_type: Logistic Regression
   penalty: l2
-  C: 0.2
+  C: 0.5
   max_iter: 100
   solver: lbfgs
   n_jobs: -1

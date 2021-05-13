@@ -1,5 +1,5 @@
 import pandas as pd
-from src import create_family_size
+from src.preprocessing_pipeline import create_family_size
 
 
 def test_create_family_size():

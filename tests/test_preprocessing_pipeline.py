@@ -1,11 +1,11 @@
 import os
 import mlflow
-from src import (
+from src.utils import (
     load_config,
     load_parameters,
-    ingest_split,
-    create_preprocessing_pipeline
 )
+from src.ingest_split import ingest_split
+from src.preprocessing_pipeline import create_preprocessing_pipeline
 
 
 def test_preprocessing_pipeline():
@@ -34,12 +34,11 @@ def test_preprocessing_pipeline():
         )
 
         # Run the function
-        preprocess_pipeline = create_preprocessing_pipeline(
-            pipeline_parameters=parameters["pipeline_parameters"],
-            features_path=config["train_features_path"]
+        preprocessing_pipeline = create_preprocessing_pipeline(
+            pipeline_parameters=parameters["pipeline_parameters"]
         )
         X_holdout = (
-            preprocess_pipeline.fit_transform(X_holdout)
+            preprocessing_pipeline.fit_transform(X_holdout)
             .sort_values(by=uid)
         )
 

@@ -1,5 +1,5 @@
 import pandas as pd
-from src import set_df_index
+from src.preprocessing_pipeline import set_df_index
 
 
 def test_set_df_index():

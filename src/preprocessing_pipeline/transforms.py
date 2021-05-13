@@ -43,12 +43,15 @@ def set_df_index(
         df_index_col="col1"
     )
     """
-
     logger.info("Running set_df_index()")
 
-    df_out = df.set_index(df_index_col, drop=True)
+    try:
+        df_out = df.set_index(df_index_col, drop=True)
 
-    return df_out
+        return df_out
+
+    except Exception:
+        logger.exception("Error running set_df_index()")
 
 
 def convert_to_str(
@@ -87,12 +90,16 @@ def convert_to_str(
     """
     logger.info("Running convert_to_str()")
 
-    df_out = df.copy()
+    try:
+        df_out = df.copy()
 
-    for column in convert_to_str_cols:
-        df_out[column] = df_out[column].astype(str)
+        for column in convert_to_str_cols:
+            df_out[column] = df_out[column].astype(str)
 
-    return df_out
+        return df_out
+
+    except Exception:
+        logger.exception("Error running convert_to_str()")
 
 
 def drop_columns(
@@ -132,9 +139,13 @@ def drop_columns(
 
     logger.info("Running drop_columns()")
 
-    df_out = df.drop(labels=drop_column_names, axis=1)
+    try:
+        df_out = df.drop(labels=drop_column_names, axis=1)
 
-    return df_out
+        return df_out
+
+    except Exception:
+        logger.exception("Error running drop_columns()")
 
 
 def create_title_cat(
@@ -213,19 +224,23 @@ def create_title_cat(
 
         return title
 
-    # Apply the extract_title function to the dataframe
-    df_out = df.copy()
+    try:
+        # Apply the extract_title function to the dataframe
+        df_out = df.copy()
 
-    df_out[dest_column] = (
-        df_out.apply(
-            extract_title,
-            args=([source_column]),
-            axis=1
+        df_out[dest_column] = (
+            df_out.apply(
+                extract_title,
+                args=([source_column]),
+                axis=1
+            )
+            .replace(title_codes)
         )
-        .replace(title_codes)
-    )
 
-    return df_out
+        return df_out
+
+    except Exception:
+        logger.exception("Error running create_title_cat()")
 
 
 def impute_age(
@@ -301,17 +316,21 @@ def impute_age(
 
         return age
 
-    # Apply the infer_age function to the pandas dataframe
-    df_out = df.copy()
-    df_out[source_column] = (
-        df_out.apply(
-            infer_age,
-            args=([source_column, title_cat_column, age_codes]),
-            axis=1
+    try:
+        # Apply the infer_age function to the pandas dataframe
+        df_out = df.copy()
+        df_out[source_column] = (
+            df_out.apply(
+                infer_age,
+                args=([source_column, title_cat_column, age_codes]),
+                axis=1
+            )
         )
-    )
 
-    return df_out
+        return df_out
+
+    except Exception:
+        logger.exception("Error running infer_age()")
 
 
 def create_family_size(
@@ -356,13 +375,17 @@ def create_family_size(
 
     logger.info("Running create_family_size()")
 
-    df_out = df.copy()
-    df_out[dest_column] = df_out.apply(
-        lambda row: row[source_columns].sum() + 1,
-        axis=1
-    )
+    try:
+        df_out = df.copy()
+        df_out[dest_column] = df_out.apply(
+            lambda row: row[source_columns].sum() + 1,
+            axis=1
+        )
 
-    return df_out
+        return df_out
+
+    except Exception:
+        logger.exception("Error running create_family_size()")
 
 
 def impute_missing_values(
@@ -406,32 +429,36 @@ def impute_missing_values(
     """
     logger.info("Running impute_missing_values()")
 
-    df_out = df.copy()
+    try:
+        df_out = df.copy()
 
-    # Create imputers for various dtypes
-    nan_imputer = SimpleImputer(
-        missing_values=np.nan,
-        strategy=strategy
-    )
-    none_imputer = SimpleImputer(
-        missing_values=None,
-        strategy=strategy
-    )
-    str_imputer = SimpleImputer(
-        missing_values="",
-        strategy=strategy
-    )
-    int_imputer = SimpleImputer(
-        missing_values=int,
-        strategy=strategy
-    )
+        # Create imputers for various dtypes
+        nan_imputer = SimpleImputer(
+            missing_values=np.nan,
+            strategy=strategy
+        )
+        none_imputer = SimpleImputer(
+            missing_values=None,
+            strategy=strategy
+        )
+        str_imputer = SimpleImputer(
+            missing_values="",
+            strategy=strategy
+        )
+        int_imputer = SimpleImputer(
+            missing_values=int,
+            strategy=strategy
+        )
 
-    df_out[:] = nan_imputer.fit_transform(df_out)
-    df_out[:] = none_imputer.fit_transform(df_out)
-    df_out[:] = str_imputer.fit_transform(df_out)
-    df_out[:] = int_imputer.fit_transform(df_out)
+        df_out[:] = nan_imputer.fit_transform(df_out)
+        df_out[:] = none_imputer.fit_transform(df_out)
+        df_out[:] = str_imputer.fit_transform(df_out)
+        df_out[:] = int_imputer.fit_transform(df_out)
 
-    return df_out
+        return df_out
+
+    except Exception:
+        logger.exception("Error running impute_missing_values()")
 
 
 def scaler(
@@ -469,17 +496,22 @@ def scaler(
     )
     """
     logger.info("Running scaler()")
+    try:
+        df_out = df.copy()
 
-    df_out = df.copy()
+        for column in scale_columns:
 
-    for column in scale_columns:
+            scale = MinMaxScaler()
+            df_out[column] = scale.fit_transform(
+                df_out[column].values.reshape(-1, 1)
+            )
 
-        scale = MinMaxScaler()
-        df_out[column] = scale.fit_transform(
-            df_out[column].values.reshape(-1, 1)
-        )
+        return df_out
 
-    return df_out
+    except Exception:
+        logger.exception("Error running scaler()")
+
+
 
 
 def one_hot_encoder(
@@ -520,85 +552,40 @@ def one_hot_encoder(
 
     logger.info("running one_hot_encoder()")
 
-    df_out = df.copy()
+    try:
+        df_out = df.copy()
 
-    # Reset to a generic index to allow merge by position
-    df_out.reset_index(inplace=True)
+        # Reset to a generic index to allow merge by position
+        df_out.reset_index(inplace=True)
 
-    for column in one_hot_columns:
+        for column in one_hot_columns:
 
-        # Unpack column dictionary
-        col_name = column["col_name"]
-        categories = column["categories"]
+            # Unpack column dictionary
+            col_name = column["col_name"]
+            categories = column["categories"]
 
-        # Set the column type as categorical
-        df_out[col_name] = df_out[col_name].astype("category")
+            # Set the column type as categorical
+            df_out[col_name] = df_out[col_name].astype("category")
 
-        # Create the encoder
-        oh_enc = OneHotEncoder(
-            categories=[categories],
-            sparse=False
-        )
+            # Create the encoder
+            oh_enc = OneHotEncoder(
+                categories=[categories],
+                sparse=False
+            )
 
-        # Fit the data to the encoder
-        enc_data = oh_enc.fit_transform(df_out[[col_name]].values)
-        # Set the column names
-        columns = [f"{col_name}_{col}" for col in categories]
-        # Create the dataframe of encoded data
-        df_oh = pd.DataFrame(enc_data, columns=columns)
-        # Join the dataframe on to the output dataframe
-        df_out = df_out.join(df_oh).drop(col_name, axis=1)
+            # Fit the data to the encoder
+            enc_data = oh_enc.fit_transform(df_out[[col_name]].values)
+            # Set the column names
+            columns = [f"{col_name}_{col}" for col in categories]
+            # Create the dataframe of encoded data
+            df_oh = pd.DataFrame(enc_data, columns=columns)
+            # Join the dataframe on to the output dataframe
+            df_out = df_out.join(df_oh).drop(col_name, axis=1)
 
-    # Set the index again
-    df_out.set_index(uid, inplace=True)
+        # Set the index again
+        df_out.set_index(uid, inplace=True)
 
-    return df_out
+        return df_out
 
-
-def export_transform(
-    df: pd.core.frame.DataFrame,
-    features_path: str
-):
-    """
-    Description
-    -----------
-    Export the pipeline data to a .csv file and log the feature names as mlflow
-    artifacts.
-    
-    NOTE: Presently not used in the pipeline.
-
-    Parameters
-    ----------
-    df: pd.core.frame.DataFrame
-        The dataframe to be processed
-
-    features_path: str
-        Location to save the .csv file of features
-
-    mode: str
-        Mode to indicate whether train or test data is being fit.
-
-    Returns
-    -------
-    array_out: np.ndarray.array
-        The processed dataframe
-
-    Raises
-    ------
-    Exception: Exception
-        Generic exception for logging
-
-    Examples
-    --------
-    df = export_log(
-        df=df,
-        features_path="./path/to/features.csv
-    )
-    """
-
-    logger.info("running export_log()")
-
-    # Export the .csv file
-    df.reset_index().to_csv(f"{features_path}", index=False)
-
-    return df
+    except Exception:
+        logger.exception("Error running one_hot_encoder()")
