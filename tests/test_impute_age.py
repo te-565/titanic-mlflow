@@ -1,10 +1,10 @@
 import pandas as pd
 import numpy as np
-from src import (
+from src.utils import (
     load_config,
     load_parameters,
-    impute_age
 )
+from src.preprocessing_pipeline import impute_age
 
 
 def test_impute_age():

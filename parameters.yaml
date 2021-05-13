@@ -3,8 +3,8 @@ uid: PassengerId
 
 ingest_split_parameters:  
   random_state: 43
-  train_size: 0.5
-  test_size: 0.5
+  train_size: 0.4
+  test_size: 0.6
 
 pipeline_parameters:
 
@@ -16,38 +16,38 @@ pipeline_parameters:
       - Pclass
 
   create_title_cat_kw_args:
-    source_column: 'Name'
-    dest_column: 'TitleCategory'
+    source_column: Name
+    dest_column: TitleCategory
     title_codes:
-      Mr: "gen_male"        
-      Mrs: "gen_female"       
-      Miss: "young_female"      
-      Master: "young_male"    
-      Don: "other_male"       
-      Rev: "other_male" 
-      Dr: "other_male"        
-      Mme: "gen_female"      
-      Ms: "gen_female"      
-      Major: "other_male"     
-      Lady: "other_female"      
-      Sir: "other_male"       
-      Mlle: "young_female"     
-      Col: "other_male"       
-      Capt: "other_male"      
-      Countess: "other_female"  
-      Jonkheer: "other_male"
-      Dona: "other_female"
+      Mr: gen_male     
+      Mrs: gen_female     
+      Miss: young_female  
+      Master: young_male
+      Don: other_male
+      Rev: other_male
+      Dr: other_male
+      Mme: gen_female
+      Ms: gen_female
+      Major: other_male
+      Lady: other_female
+      Sir: other_male
+      Mlle: young_female
+      Col: other_male
+      Capt: other_male
+      Countess: other_female
+      Jonkheer: other_male
+      Dona: other_female
 
   impute_age_kw_args:
-    source_column: 'Age'
-    title_cat_column: 'TitleCategory'
+    source_column: Age
+    title_cat_column: TitleCategory
     age_codes:
-      "gen_male": 30
-      "gen_female": 35
-      "young_female": 21
-      "young_male": 5
-      "other_male": 40
-      "other_female": 50
+      gen_male: 30
+      gen_female: 35
+      young_female: 21
+      young_male: 5
+      other_male: 40
+      other_female: 50
 
   create_family_size_kw_args:
     source_columns:
@@ -73,8 +73,47 @@ pipeline_parameters:
       - FamilySize
 
   one_hot_kw_args:
+    uid: PassengerId
     one_hot_columns:
-      - Pclass
-      - Sex
-      - Embarked
-      - TitleCategory
+      - col_name: Embarked
+        categories:
+          - C
+          - Q
+          - S
+      - col_name: Sex
+        categories:
+          - male
+          - female
+      - col_name: TitleCategory
+        categories:
+          - gen_male
+          - gen_female
+          - young_male
+          - young_female
+          - other_male
+          - other_female
+
+      - col_name: Pclass
+        categories:
+          - "1"
+          - "2"
+          - "3"
+
+logreg_hyperparameters:
+  model_name: logreg_v000
+  model_type: Logistic Regression
+  penalty: l2
+  C: 0.5
+  max_iter: 100
+  solver: lbfgs
+  n_jobs: -1
+  cv: 5
+
+svc_hyperparameters:
+  model_name: svc_v000
+  model_type: SVC
+  C: 0.5
+  kernel: linear
+  probability: True
+  max_iter: -1
+  cv: 5

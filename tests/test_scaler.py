@@ -1,7 +1,5 @@
 import pandas as pd
-from src import (
-    scaler
-)
+from src.preprocessing_pipeline import scaler
 
 
 def test_scaler():

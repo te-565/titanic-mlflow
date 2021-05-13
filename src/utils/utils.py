@@ -34,16 +34,19 @@ def load_config(env_path):
     """
 
     try:
-        load_dotenv(env_path)
+        load_dotenv(env_path, override=True)
         config = dict(
             app_name=os.getenv("APP_NAME"),
             parameters_path=os.getenv("PARAMETERS_PATH"),
-            artifacts_path=os.getenv("ARTIFACTS_PATH"),
+            artifact_path=os.getenv("ARTIFACT_PATH"),
+            models_path=os.getenv("MODELS_PATH"),
             logs_path=os.getenv("LOGS_PATH"),
+            mlflow_tracking_db=os.getenv("MLFLOW_TRACKING_DB"),
             mlflow_tracking_uri=os.getenv("MLFLOW_TRACKING_URI"),
             mlflow_experiment=os.getenv("MLFLOW_EXPERIMENT"),
-            train_raw_path=os.getenv("TRAIN_RAW_PATH"),
-            holdout_raw_path=os.getenv("HOLDOUT_RAW_PATH")
+            train_test_raw_path=os.getenv("TRAIN_TEST_RAW_PATH"),
+            holdout_raw_path=os.getenv("HOLDOUT_RAW_PATH"),
+            train_features_path=os.getenv("TRAIN_FEATURES_PATH")
         )
 
         return config
@@ -89,7 +92,9 @@ def load_logger(
             format="{time} {level} {message}",
             filter=app_name,
             level="INFO",
-            colorize=True
+            colorize=True,
+            backtrace=False,
+            diagnose=True
         )
         logs_path = "{}/{}.log".format(logs_path, "{time}")
         logger.add(logs_path)

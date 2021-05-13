@@ -1,7 +1,7 @@
 from loguru import logger
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
-from src import (
+from src.preprocessing_pipeline.transforms import (
     set_df_index,
     convert_to_str,
     create_title_cat,
@@ -10,7 +10,7 @@ from src import (
     drop_columns,
     impute_missing_values,
     scaler,
-    one_hot_encoder
+    one_hot_encoder,
 )
 
 
@@ -56,6 +56,8 @@ def create_preprocessing_pipeline(
     )
     """
     try:
+        logger.info("Running create_preprocessing_pipeline()")
+
         # Create the pre-processing pipeline
         preprocessing_pipeline = Pipeline([
             ("Set dataframe index", FunctionTransformer(
@@ -98,5 +100,6 @@ def create_preprocessing_pipeline(
 
         return preprocessing_pipeline
 
-    except Exception:
-        logger.exception("Error in preprocessing_pipeline()")
+    except Exception as e:
+        logger.exception("Exception in create_preprocessing_pipeline()")
+        logger.exception(e)

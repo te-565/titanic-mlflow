@@ -1,5 +1,5 @@
 import pandas as pd
-from src.transforms import drop_columns
+from src.preprocessing_pipeline import drop_columns
 
 
 def test_drop_columns():

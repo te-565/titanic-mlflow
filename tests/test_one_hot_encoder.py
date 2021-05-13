@@ -1,5 +1,5 @@
 import pandas as pd
-from src import one_hot_encoder
+from src.preprocessing_pipeline import one_hot_encoder
 
 
 def test_one_hot_encoder():
@@ -22,16 +22,25 @@ def test_one_hot_encoder():
         dict(id=5, col1="bar", col2="wubble"),
     ]
     df = pd.DataFrame(data).set_index("id", drop=True)
-
+    
     # Set the parameters
-    one_hot_columns = ["col1", "col2"]
+    one_hot_columns = [
+        dict(
+            col_name="col1",
+            categories=["foo", "bar"]            
+        ),
+        dict(
+            col_name="col2",
+            categories=["wibble", "wubble"]     
+        )
+    ]
 
     # Run the function
-    df_out = one_hot_encoder(df=df, one_hot_columns=one_hot_columns)
+    df_out = one_hot_encoder(df=df, uid="id", one_hot_columns=one_hot_columns)
 
     # Run the tests
     assert df_out.columns.tolist() == [
-        "col1_bar", "col1_foo", "col2_wibble", "col2_wubble"
+        "col1_foo", "col1_bar", "col2_wibble", "col2_wubble"
     ]
     assert df_out["col1_foo"].tolist() == [1, 1, 0, 0, 0]
     assert df_out["col1_bar"].tolist() == [0, 0, 1, 1, 1]

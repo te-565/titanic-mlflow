@@ -2,10 +2,9 @@ import pandas as pd
 import numpy as np
 from src import (
     load_config,
-    load_parameters,
-    impute_missing_values
+    load_parameters
 )
-
+from src.preprocessing_pipeline import impute_missing_values
 
 def test_impute_missing_values():
     """Test the impute_missing_values function"""

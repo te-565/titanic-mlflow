@@ -4,7 +4,8 @@ import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import (
-    MinMaxScaler
+    MinMaxScaler,
+    OneHotEncoder
 )
 
 
@@ -42,16 +43,15 @@ def set_df_index(
         df_index_col="col1"
     )
     """
-
     logger.info("Running set_df_index()")
 
     try:
         df_out = df.set_index(df_index_col, drop=True)
 
-    except Exception:
-        logger.exception("Error in set_df_index()")
+        return df_out
 
-    return df_out
+    except Exception:
+        logger.exception("Error running set_df_index()")
 
 
 def convert_to_str(
@@ -90,16 +90,16 @@ def convert_to_str(
     """
     logger.info("Running convert_to_str()")
 
-    df_out = df.copy()
-
     try:
+        df_out = df.copy()
+
         for column in convert_to_str_cols:
             df_out[column] = df_out[column].astype(str)
 
         return df_out
 
     except Exception:
-        logger.exception("Error in drop_columns()")
+        logger.exception("Error running convert_to_str()")
 
 
 def drop_columns(
@@ -145,7 +145,7 @@ def drop_columns(
         return df_out
 
     except Exception:
-        logger.exception("Error in drop_columns()")
+        logger.exception("Error running drop_columns()")
 
 
 def create_title_cat(
@@ -224,8 +224,8 @@ def create_title_cat(
 
         return title
 
-    # Apply the extract_title function to the dataframe
     try:
+        # Apply the extract_title function to the dataframe
         df_out = df.copy()
 
         df_out[dest_column] = (
@@ -240,7 +240,7 @@ def create_title_cat(
         return df_out
 
     except Exception:
-        logger.exception("Error in create_title_cat()")
+        logger.exception("Error running create_title_cat()")
 
 
 def impute_age(
@@ -303,7 +303,7 @@ def impute_age(
         """Infers the age of a passenger based upon the passenger title,
         Applied to a pandas dataframe"""
 
-        if(pd.isnull(row[source_column])):
+        if (pd.isnull(row[source_column])):
 
             # Iterate through the codes and assign an age based upon the title
             for key, value in age_codes.items():
@@ -317,7 +317,6 @@ def impute_age(
         return age
 
     try:
-
         # Apply the infer_age function to the pandas dataframe
         df_out = df.copy()
         df_out[source_column] = (
@@ -331,7 +330,7 @@ def impute_age(
         return df_out
 
     except Exception:
-        logger.exception("Error in impute_age()")
+        logger.exception("Error running infer_age()")
 
 
 def create_family_size(
@@ -386,7 +385,7 @@ def create_family_size(
         return df_out
 
     except Exception:
-        logger.exception("Error in create_family_size()")
+        logger.exception("Error running create_family_size()")
 
 
 def impute_missing_values(
@@ -425,7 +424,7 @@ def impute_missing_values(
     --------
     df = impute_missing_values(
         df=df,
-        strategy="most_frequent
+        strategy="most_frequent"
     )
     """
     logger.info("Running impute_missing_values()")
@@ -459,7 +458,7 @@ def impute_missing_values(
         return df_out
 
     except Exception:
-        logger.exception("Error in impute_missing_values()")
+        logger.exception("Error running impute_missing_values()")
 
 
 def scaler(
@@ -489,10 +488,15 @@ def scaler(
     Exception: Exception
         Generic exception for logging
 
+    Examples
+    --------
+    df = scaler(
+        df=df,
+        scale_columns=["col1", "col2"]
+    )
     """
+    logger.info("Running scaler()")
     try:
-        logger.info("Running scaler()")
-
         df_out = df.copy()
 
         for column in scale_columns:
@@ -505,12 +509,15 @@ def scaler(
         return df_out
 
     except Exception:
-        logger.exception("Error in impute_missing_values()")
+        logger.exception("Error running scaler()")
+
+
 
 
 def one_hot_encoder(
     df: pd.core.frame.DataFrame,
-    one_hot_columns: str
+    uid: str,
+    one_hot_columns: list
 ):
     """
     Description
@@ -534,25 +541,51 @@ def one_hot_encoder(
     ------
     Exception: Exception
         Generic exception for logging
+
+    Examples
+    --------
+    df = one_hot_encoder(
+        df=df,
+        one_hot_columns=["col1", "col2"]
+    )
     """
 
-    try:
-        logger.info("running one_hot_encoder()")
+    logger.info("running one_hot_encoder()")
 
+    try:
         df_out = df.copy()
 
+        # Reset to a generic index to allow merge by position
+        df_out.reset_index(inplace=True)
+
         for column in one_hot_columns:
-            # Use pandas implementation as it's simpler
-            df_oh = pd.get_dummies(df_out[[column]])
-            df_out = pd.merge(
-                left=df_out.drop(column, axis=1),
-                right=df_oh,
-                left_index=True,
-                right_index=True,
-                how="left"
+
+            # Unpack column dictionary
+            col_name = column["col_name"]
+            categories = column["categories"]
+
+            # Set the column type as categorical
+            df_out[col_name] = df_out[col_name].astype("category")
+
+            # Create the encoder
+            oh_enc = OneHotEncoder(
+                categories=[categories],
+                sparse=False
             )
+
+            # Fit the data to the encoder
+            enc_data = oh_enc.fit_transform(df_out[[col_name]].values)
+            # Set the column names
+            columns = [f"{col_name}_{col}" for col in categories]
+            # Create the dataframe of encoded data
+            df_oh = pd.DataFrame(enc_data, columns=columns)
+            # Join the dataframe on to the output dataframe
+            df_out = df_out.join(df_oh).drop(col_name, axis=1)
+
+        # Set the index again
+        df_out.set_index(uid, inplace=True)
 
         return df_out
 
     except Exception:
-        logger.exception("Error in one_hot_encoder()")
+        logger.exception("Error running one_hot_encoder()")
