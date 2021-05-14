@@ -2,6 +2,7 @@ import os
 import mlflow
 from src.utils import (
     load_config,
+    load_logger,
     load_parameters,
 )
 from src.ingest_split import ingest_split
@@ -13,6 +14,10 @@ def test_preprocessing_pipeline():
 
     # Load in the test configuration & parameters
     config = load_config(".env.test")
+    logger = load_logger(
+        app_name=config["app_name"],
+        logs_path=config["logs_path"]
+    )
 
     # Configure MLFlow
     mlflow.set_tracking_uri(config["mlflow_tracking_uri"])
@@ -23,7 +28,6 @@ def test_preprocessing_pipeline():
 
         parameters = load_parameters(parameters_path=config["parameters_path"])
         uid = parameters["uid"]
-        print(config)
 
         # Ingest the data
         X_train, X_test, y_train, y_test, X_holdout = ingest_split(
@@ -45,7 +49,7 @@ def test_preprocessing_pipeline():
         # Run the tests
         # Structure
         assert X_holdout.index.name == "PassengerId"
-        assert X_holdout.shape == (19, 16)
+        assert X_holdout.shape == (57, 16)
 
         # Scaling
         assert X_holdout["Age"].min() == 0

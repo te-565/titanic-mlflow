@@ -45,8 +45,7 @@ def load_config(env_path):
             mlflow_tracking_uri=os.getenv("MLFLOW_TRACKING_URI"),
             mlflow_experiment=os.getenv("MLFLOW_EXPERIMENT"),
             train_test_raw_path=os.getenv("TRAIN_TEST_RAW_PATH"),
-            holdout_raw_path=os.getenv("HOLDOUT_RAW_PATH"),
-            train_features_path=os.getenv("TRAIN_FEATURES_PATH")
+            holdout_raw_path=os.getenv("HOLDOUT_RAW_PATH")
         )
 
         return config
@@ -94,7 +93,7 @@ def load_logger(
             level="INFO",
             colorize=True,
             backtrace=False,
-            diagnose=True
+            diagnose=False
         )
         logs_path = "{}/{}.log".format(logs_path, "{time}")
         logger.add(logs_path)
