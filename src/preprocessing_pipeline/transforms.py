@@ -10,7 +10,7 @@ from sklearn.preprocessing import (
 
 
 def set_df_index(
-    df: pd.core.frame.DataFrame,
+    df: pd,
     df_index_col: str,
 ):
     """
@@ -20,7 +20,7 @@ def set_df_index(
 
     Parameters
     ----------
-    df: pandas.core.frame.DataFrame
+    df: pandas.core.frame.DataFrame or pandas.core.series.Series
         The dataframe to be processed
 
     df_index: list
@@ -46,7 +46,19 @@ def set_df_index(
     logger.info("Running set_df_index()")
 
     try:
-        df_out = df.set_index(df_index_col, drop=True)
+        df_out = df.copy()
+
+        # Handle single records which are passed as a series
+        if isinstance(df_out, pd.core.series.Series):
+            df_out = (
+                pd.DataFrame(df_out)
+                .transpose()
+                .set_index(df_index_col, drop=True)
+            )
+
+        # Handle multiple records which are passed as a DataFrame
+        else:
+            df_out = df_out.set_index(df_index_col, drop=True)
 
         return df_out
 
