@@ -16,7 +16,7 @@ artifacts/*
 artifacts/!.gitkeep
 titanic.code-workspace
 db/
-db/!gitkeep
+!db/.gitkeep
 stuff.txt
 Requests.ipynb
 
