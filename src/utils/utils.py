@@ -137,8 +137,7 @@ def load_parameters(parameters_path):
             parameters = yaml.safe_load(stream)
             return parameters
 
-        except Exception as e:
+        except Exception:
 
             # Raise exception if the .yaml file can't be parsed
             logger.exception("Error in load_parameters()")
-            logger.exception(e)

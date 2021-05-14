@@ -77,7 +77,6 @@ def run(deploy: bool = False):
                 model=model,
                 model_name=model_name,
                 X_train=X_train,
-                y_train=y_train,
                 artifact_path=config["artifact_path"],
                 models_path=f"{config['models_path']}/{model_name}/"
             )
