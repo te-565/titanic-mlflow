@@ -104,7 +104,7 @@ create-db-test: ## Creates a backend sqlite database to store MLFlow test data
 mlflow-server: ## Start the MLFlow webserver
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
 	mlflow server \
-	--port 5000 \
+	--port $(MLFLOW_UI_PORT) \
 	--backend-store-uri $(MLFLOW_TRACKING_URI) \
 	--default-artifact-root $(ARTIFACT_PATH) 
 
@@ -112,5 +112,5 @@ mlflow-server: ## Start the MLFlow webserver
 mlflow-serve-model: ## Serves the model
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
 	mlflow models serve -m $(MODELS_PATH)/logreg_v000 \
-	-p 1234 \
+	--port $(MLFLOW_MODEL_SERVER_PORT) \
 	--no-conda
