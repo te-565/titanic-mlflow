@@ -1,4 +1,3 @@
-import os
 from src.utils.utils import (
     load_config,
     load_parameters
