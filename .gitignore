@@ -14,10 +14,8 @@ data/*
 data/!.gitkeep
 artifacts/*
 artifacts/!.gitkeep
-titanic.code-workspace
-db/
-!db/.gitkeep
-stuff.txt
+db/*
+db/!.gitkeep
 Requests.ipynb
 
 
