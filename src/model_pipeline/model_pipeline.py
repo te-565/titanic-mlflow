@@ -12,7 +12,6 @@ def create_model_pipeline(
     model: sklearn,
     model_name: str,
     X_train: pd.core.frame.DataFrame,
-    y_train: pd.core.frame.DataFrame,
     artifact_path: str,
     models_path: str
 ):
@@ -65,10 +64,11 @@ def create_model_pipeline(
 
     Examples
     --------
-    model = evaluate_model(
+    model_pipeline, model = create_model_pipeline(
         preprocessing_pipeline=preprocessing_pipeline,
-        model=logreg_model.
-        X_train=X_train
+        model=logreg_model,
+        model_name="model_name",
+        X_train=X_train,
         y_train=y_train,
         X_test=X_test,
         y_test=y_test,
@@ -84,9 +84,6 @@ def create_model_pipeline(
         model_pipeline.steps.append(
             ["Model", model]
         )
-
-        # Fit the model
-        model_pipeline.fit(X=X_train, y=y_train.values.ravel())
 
         # Infer the signature for the model
         signature = infer_signature(
