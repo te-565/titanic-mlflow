@@ -4,6 +4,7 @@ from src.utils.utils import (
     load_parameters
 )
 
+
 def test_load_parameters():
     """Test for the load_parameters function"""
 
