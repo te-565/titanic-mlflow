@@ -5,18 +5,52 @@
 .env.dev
 .env.test
 Main.ipynb
-data/dummy/*.csv
-data/holdout/*.csv
-data/train/*.csv
+
+
+artifacts/dev/*.csv
+artifacts/dev/*.png
+!artifacts/dev/.gitkeep
+artifacts/dev/models/*
+!artifacts/dev/models/.gitkeep
+
+artifacts/dummy/*.csv
+artifacts/dummy/*.png
+!artifacts/dummy/.gitkeep
+artifacts/dummy/models/*
+!artifacts/dummy/models/.gitkeep
+
+data/dev/*
+!data/dev/.gitkeep
+data/dummy/*
+!data/dummy/.gitkeep
+
+logs/*
+!logs/.gitkeep
+
+logs-test/*
+!logs-test/.gitkeep
+
 mlruns/*
-mlruns/!.gitkeep
-data/*
-data/!.gitkeep
-artifacts/*
-artifacts/!.gitkeep
+!mlruns/.gitkeep
+
 db/*
-db/!.gitkeep
-Requests.ipynb
+!db/.gitkeep
+
+
+
+
+# data/dummy/*.csv
+# data/holdout/*.csv
+# data/train/*.csv
+# mlruns/*
+# mlruns/!.gitkeep
+# data/*
+# data/!.gitkeep
+# artifacts/*
+# !artifacts/.gitkeep
+# db/*
+# db/!.gitkeep
+# Requests.ipynb
 
 
 # Byte-compiled / optimized / DLL files

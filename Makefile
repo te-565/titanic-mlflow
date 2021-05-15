@@ -20,6 +20,8 @@ help:
 create-environment: ## Create the env, install packages, create a kernel and write to environment.yaml
 	conda create --name $(CONDA_ENVIRONMENT_NAME) --channel conda-forge --yes python=$(PYTHON_VERSION)
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
+	conda config --add channels conda-forge && \
+	conda config --set channel_priority strict && \
 	conda install --yes --file requirements-conda.txt && \
 	pip install -r requirements-pip.txt && \
 	conda env export > environment.yaml
