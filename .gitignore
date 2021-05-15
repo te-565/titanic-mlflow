@@ -24,11 +24,8 @@ data/dev/*
 data/dummy/*
 !data/dummy/.gitkeep
 
-logs/*
-!logs/.gitkeep
-
-logs-test/*
-!logs-test/.gitkeep
+!log/logs-dev/.gitkeep
+!log/logs-dummy/.gitkeep
 
 mlruns/*
 !mlruns/.gitkeep

@@ -102,8 +102,8 @@ create-db-test: ## Creates a backend sqlite database to store MLFlow test data
 	python -m create_db --env-path=./.env.test
 	$(DEACTIVATE) 
 
-.PHONY: mlflow-server
-mlflow-server: ## Start the MLFlow webserver
+.PHONY: mlflow-ui
+mlflow-ui: ## Start the MLFlow webserver
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
 	mlflow server \
 	--port $(MLFLOW_UI_PORT) \
