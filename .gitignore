@@ -9,7 +9,7 @@ data/dummy/*.csv
 data/holdout/*.csv
 data/train/*.csv
 mlruns/*
-!mlruns/.gitkeep
+mlruns/!.gitkeep
 data/*
 data/!.gitkeep
 artifacts/*
