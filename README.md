@@ -1,6 +1,6 @@
 # titanic-mlflow-skl
 
-This repository serves as a prototype for Saint Gobain UK's AI and Machine Learning projects implemented in Python using Scikit-Learn and MLFlow. 
+This repository serves as a prototype for Saint Gobain UK's AI and Machine Learning projects implemented in Python using Scikit-Learn and MLFlow using the [Kaggle Titanic challenge](https://www.kaggle.com/c/titanic). 
 
 The focus isn't the model, but the framework, standards and tools used to structure the project and deploy the model. These are as follows:
 
@@ -15,6 +15,8 @@ The focus isn't the model, but the framework, standards and tools used to struct
 * Plac to simplify the creation of command line execution options.
 * Model experimentation and deployment with MLFlow.
 * Machine Learning visualisation produced via `yellowbrick` and `scikitplot`
+
+Links to the packages mentioned here can be found in the **Useful Links** section.
 
 Over time, I will be expanding upon these topics with documentation, sessions and tutorials etc. to ensure that the "why", "what" and "how" get properly explained.
 
@@ -110,46 +112,31 @@ Note that the `dummy` convention has been used for things which might traditiona
 TODO
 
 ## Repo Structure
-```
+```bash
 ├── LICENSE
-├── MLProject
-├── Makefile
+├── Makefile  # Used to simplify command line exeuction
 ├── README.md
-├── artifacts
-├── assets
-├── create_db.py
-├── data
-│   ├── dev
-│   └── dummy
-├── db
-├── environment.yaml
-├── logs
-├── logs-dummy
-├── main.py
-├── mlruns
-├── notebooks
-├── parameters.yaml
-├── query_model_server.ipynb
-├── requirements-conda.txt
-├── requirements-pip.txt
-├── src
-│   ├── __init__.py
-│   ├── ingest_split
-│   │   └── ingest_split.py
-│   ├── model_pipeline
-│   │   ├── __init__.py
-│   │   ├── evaluate.py
-│   │   └── model_pipeline.py
-│   ├── models
-│   │   ├── __init__.py
-│   │   ├── logreg_model.py
-│   │   └── svc_model.py
-│   ├── preprocessing_pipeline
-│   │   ├── __init__.py
-│   │   ├── preprocessing.py
-│   │   └── transforms.py
-│   └── utils
-└── tests
+├── artifacts  # Stored MLFlow files
+│   ├── dev # Live files created during processing
+│   └── dummy # Fake files created during testing.
+├── assets  # Stores files associated with the repo
+├── create_db.py  # Creates sqlite databases for MLflow
+├── data  # Data for the application
+│   ├── dev # Live data used for development
+│   └── dummy # Fake data used for testing
+├── db  # Database files for MLFlow tracking
+├── environment.yaml  # Package data for the environment
+├── logs  # Logs produced during processing
+├── logs-dummy  # Logs produced during testing
+├── main.py  # Entrypoint for the application
+├── mlruns  # Local store for MLFlow tracking
+├── notebooks  # Notebooks storage
+├── parameters.yaml  # Parameters for processing
+├── query_model_server.ipynb  # Used to test the MLFlow API
+├── requirements-conda.txt  # Conda package dependencies
+├── requirements-pip.txt  # Pip package dependencies
+├── src  # Functaionlity for the application
+└── tests  # Tests for the applcation
 ```
 
 ## MLFlow
@@ -182,3 +169,17 @@ To serve a model, you must first save it by running `make mlflow-deployment`. It
 6. Create end-to-end tests for the application.
 
 ## Useful Links
+
+* [Kaggle Titanic challenge](https://www.kaggle.com/c/titanic)
+* [PEP8 (Python Style Guide)](https://www.python.org/dev/peps/pep-0008/)
+* [Make](https://www.gnu.org/software/make/)
+* [A Gentle Introduction to Make](https://www.norwegiancreations.com/2018/06/makefiles-part-1-a-gentle-introduction/)
+* [An Introduction to Environment Variables](https://medium.com/chingu/an-introduction-to-environment-variables-and-how-to-use-them-f602f66d15fa#:~:text=An%20environment%20variable%20is%20a,at%20a%20point%20in%20time.)
+* [Python Dotenv Package](https://pypi.org/project/python-dotenv/)
+* [Python PyYAML Package](https://zetcode.com/python/yaml/)
+* [Python PyTest Package](https://docs.pytest.org/en/6.2.x/)
+* [Python Coverage package](https://coverage.readthedocs.io/en/coverage-5.5/)
+* [MLFlow](https://www.mlflow.org/docs/latest/index.html)
+* [Python Yellowbrick package](https://www.scikit-yb.org/en/latest/0)
+* [Python Scikit-plot package](https://scikit-plot.readthedocs.io/en/stable/Quickstart.html)
+* [Logging in Python](https://realpython.com/python-logging/)
