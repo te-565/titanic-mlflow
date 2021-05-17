@@ -20,6 +20,8 @@ help:
 create-environment: ## Create the env, install packages, create a kernel and write to environment.yaml
 	conda create --name $(CONDA_ENVIRONMENT_NAME) --channel conda-forge --yes python=$(PYTHON_VERSION)
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
+	conda config --add channels conda-forge && \
+	conda config --set channel_priority strict && \
 	conda install --yes --file requirements-conda.txt && \
 	pip install -r requirements-pip.txt && \
 	conda env export > environment.yaml
@@ -100,8 +102,8 @@ create-db-test: ## Creates a backend sqlite database to store MLFlow test data
 	python -m create_db --env-path=./.env.test
 	$(DEACTIVATE) 
 
-.PHONY: mlflow-server
-mlflow-server: ## Start the MLFlow webserver
+.PHONY: mlflow-ui
+mlflow-ui: ## Start the MLFlow webserver
 	$(ACTIVATE) $(CONDA_ENVIRONMENT_NAME) && \
 	mlflow server \
 	--port $(MLFLOW_UI_PORT) \

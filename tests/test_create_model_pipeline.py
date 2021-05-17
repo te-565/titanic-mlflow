@@ -1,5 +1,5 @@
 import os
-import shutil
+import glob
 import mlflow
 import sklearn
 from src.utils import (
@@ -28,16 +28,16 @@ def test_create_model_pipeline():
         config["artifact_path"],
         config["models_path"]
     ]
+
     for folder in folders_to_clean:
-        for filename in os.listdir(folder):
-            file_path = os.path.join(folder, filename)
+        files = glob.glob(folder)
+        for f in files:
             try:
-                if os.path.isfile(file_path) or os.path.islink(file_path):
-                    os.unlink(file_path)
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-            except Exception as e:
-                print(e)
+                # If it's a file delete it
+                os.remove(f)
+            except:
+                # If it's a folder, pass
+                pass
 
     # Configure MLFlow
     mlflow.set_tracking_uri(config["mlflow_tracking_uri"])
