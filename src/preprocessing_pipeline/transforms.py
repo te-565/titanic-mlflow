@@ -524,8 +524,6 @@ def scaler(
         logger.exception("Error running scaler()")
 
 
-
-
 def one_hot_encoder(
     df: pd.core.frame.DataFrame,
     uid: str,
