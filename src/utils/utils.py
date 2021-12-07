@@ -55,52 +55,41 @@ def load_config(env_path):
         logger.exception(e)
 
 
-def load_logger(
-    app_name: str,
-    logs_path: str
-):
-    """
-    Description
-    -----------
-    Loads and initialises the logger for the application.
+now = datetime.now().strftime("%Y-%m-%d %H%M%S")
+    filename = f"{logs_path}/{app_name} {now}.log"
+    
+    # Remove default handler
+    logger.remove()
 
-    Parameters
-    ----------
-    app_name: str
-        The name of the application.
+    # Add logs file output
+    logger.add(
+        sink=filename,
+        backtrace=False,
+        diagnose=True,
+        catch=False,
+        colorize=False,
+        level=logs_level
+    )
+    
+    # Add console output (with colour!)
+    logger.add(
+        sink=sys.stdout,
+        backtrace=False,
+        diagnose=True,
+        catch=False,
+        colorize=True,
+        level=logs_level
+    )
 
-    logs_path: str
-        Location to output logs to.
-
-    Returns
-    -------
-    None
-
-    Raises
-    ------
-    Exception:
-        Raises & logs an exception if there's any errors in the function.
-
-    Examples
-    --------
-    load_logger()
-    """
-    try:
-        logger.add(
-            sys.stderr,
-            format="{time} {level} {message}",
-            filter=app_name,
-            level="INFO",
-            colorize=True,
-            backtrace=False,
-            diagnose=False
+    try: 
+        # Add additional logging level for Metaadta
+        logger.level("METADATA", no=21, color="<blue>")
+        logger.__class__.metadata = (
+            partialmethod(logger.__class__.log, "METADATA")
         )
-        logs_path = "{}/{}.log".format(logs_path, "{time}")
-        logger.add(logs_path)
-
-    except Exception as e:
-        logger.exception("Error in load_logger()")
-        logger.exception(e)
+        
+    except TypeError:
+        print("Additional logging levels already added")
 
 
 def load_parameters(parameters_path):
